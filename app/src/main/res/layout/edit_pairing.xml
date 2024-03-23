@@ -1,0 +1,101 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_pairing_result" />
+
+
+    <TextView
+        android:id="@+id/pairing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="" />
+
+
+    <RelativeLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/goals_home"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/colon"
+            android:inputType="number"
+            android:textAlignment="center"
+            android:imeOptions="actionNext"
+            android:lines="1" />
+
+        <TextView
+            android:id="@+id/colon"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text=":" />
+
+        <EditText
+            android:id="@+id/goals_away"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/colon"
+            android:textAlignment="center"
+            android:inputType="number"
+            android:imeOptions="actionDone"
+            android:lines="1" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/LinearLayout02"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/extra_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/extra_time" />
+
+        <CheckBox
+            android:id="@+id/penalty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/penalty" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/LinearLayout03"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:id="@+id/cancel"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:background="#6200EE"
+            android:src="@drawable/cancel_white" />
+
+        <ImageButton
+            android:id="@+id/save"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:background="#6200EE"
+            android:src="@drawable/check_white" />
+
+    </RelativeLayout>
+</LinearLayout>

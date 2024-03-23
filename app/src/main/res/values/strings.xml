@@ -1,0 +1,70 @@
+<resources>
+    <!-- name of the app -->
+    <string name="app_name">Tipp Kick Spielrundenverwaltung</string>
+    <!-- menu item and title of single activities -->
+    <string name="print">Drucken</string>
+    <string name="title_teams">Vereine</string>
+    <string name="title_competition">Wettbewerbe</string>
+    <string name="title_play">Spielen</string>
+    <string name="version_info">Versionsinfo</string>
+
+    <!-- common phrases -->
+    <string name="cancel">Abbrechen</string>
+    <string name="delete">Löschen</string>
+    <string name="hint">Hinweis</string>
+    <string name="no">Nein</string>
+    <string name="not_found">Nicht gefunden</string>
+    <string name="ok">Ok</string>
+    <string name="open_file">Datei öffnen</string>
+    <string name="save">Speichern</string>
+    <string name="yes">Ja</string>
+
+    <!-- texts for teams -->
+    <string name="add_team">Verein hinzufügen</string>
+    <string name="cannot_delete_team">Der Verein kann nicht gelöscht werden, weil er schon in mindestens einem Wettbewerb verwendet wird.</string>
+    <string name="delete_team">Verein löschen</string>
+    <string name="delete_team_question">Soll der Verein wirklich gelöscht werden?</string>
+    <string name="import_teams">Die Vereine der ersten drei Ligen wurden importiert.</string>
+    <string name="enter_team">Trage hier den Vereinsnamen ein</string>
+    <string name="enter_team_please">Bitte gib den Vereinsnamen ein!</string>
+    <string name="no_teams_yet">Es sind noch keine Teams vorhanden.</string>
+    <string name="team_deleted">Der Verein wurde erfolgreich gelöscht.</string>
+    <string name="team_saved">Der Verein wurde erfolgreich gespeichert.</string>
+
+    <!-- texts for competitions -->
+    <string name="add_competition">Wettbewerb hinzufügen</string>
+    <string name="chose_number_of_teams">Wähle die Anzahl der Vereine</string>
+    <string name="chose_competition_type">Wähle die Art des Wettbewerbs</string>
+    <string name="competition_deleted">Der Wettbewerb wurde erfolgreich gelöscht.</string>
+    <string name="competition_saved">Der Wettbewerb wurde erfolgreich gespeichert.</string>
+    <string name="delete_competition">Wettbewerb löschen</string>
+    <string name="delete_competition_question">Soll der Wettbewerb und alle seine Spiele wirklich gelöscht werden?</string>
+    <string name="drawing_finished">Der Wettbewerb wurde ausgelost und kann jetzt im Bereich "Spielen" gespielt werden.</string>
+    <string name="drawing_next_round_finished">Die nächste Runde wurde ausgelost.</string>
+    <string name="enter_competition">Gib hier den Wettbewerbsnamen ein</string>
+    <string name="enter_competition_please">Bitte gib den Namen des Wettbewerbs ein!</string>
+    <string name="no_competitions_yet">Es sind noch keine Wettbewerbe vorhanden.</string>
+    <string name="start_drawing">Auslosung starten</string>
+    <string name="start_drawing_question">Wenn die Auslosung gestartet wird, kann der Wettbewerb nicht mehr bearbeitet werden. Soll die Auslosung gestartet werden?</string>
+    <string name="teams_chosen">Vereine ausgewählt</string>
+
+    <!-- texts for playing -->
+    <string name="chose_competition">Wähle den Wettbewerb</string>
+    <string name="draw_next_round">Nächste Runde auslosen</string>
+    <string name="enter_pairing_result">Endstand der Partie</string>
+    <string name="enter_valid_result">Bitte gib entweder ein gültiges Ergebnis ein oder leere das komplette Ergebnis.</string>
+    <string name="extra_time">Verlängerung</string>
+    <string name="final_">Finale</string>
+    <string name="no_undecided_match">Dieses Spiel findet in einer KO-Runde statt. Es darf kein Unentschieden geben.</string>
+    <string name="no_finished_competitions_yet">Es sind noch keine ausgelosten Wettbewerbe vorhanden.</string>
+    <string name="penalty">Elfmeterschießen</string>
+    <string name="quarter_final">Viertelfinale</string>
+    <string name="round">Runde</string>
+    <string name="round_of_16">Achtelfinale</string>
+    <string name="semi_final">Halbfinale</string>
+
+    <!-- texts for menu functions -->
+    <string name="select_print_item">Was möchtest Du drucken?</string>
+    <string name="select_competition">Wähle den Wettbewerb</string>
+
+</resources>

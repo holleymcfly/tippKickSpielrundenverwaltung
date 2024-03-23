@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/navigation_version_info"
+        android:icon="@drawable/info_purple"
+        android:title="@string/version_info" />
+
+    <item
+        android:id="@+id/navigation_print"
+        android:icon="@drawable/print_purple"
+        android:title="@string/print" />
+</menu>
