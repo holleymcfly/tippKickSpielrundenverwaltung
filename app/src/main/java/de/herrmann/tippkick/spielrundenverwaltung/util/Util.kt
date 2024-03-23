@@ -8,7 +8,6 @@ import de.herrmann.tippkick.spielrundenverwaltung.persistence.CompetitionsDBAcce
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.PairingDBAccess
 
 class Util {
-
     companion object {
         fun showOkButtonMessage(context: Context, message: String) {
             val builder = AlertDialog.Builder(context)

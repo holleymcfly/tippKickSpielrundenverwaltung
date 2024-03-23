@@ -7,22 +7,18 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.graphics.pdf.PdfDocument.PageInfo
-import android.net.Uri
-import android.os.Build
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import de.herrmann.tippkick.spielrundenverwaltung.R
 import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionDAO
 import de.herrmann.tippkick.spielrundenverwaltung.model.PairingDAO
 import java.io.File
 import java.io.FileOutputStream
-import java.util.Objects
 
 
 class PdfCreator {
 
-    private var verticalPosition: Float = 100F;
+    private var verticalPosition: Float = 100F
     private lateinit var competition: CompetitionDAO
     private lateinit var pairings: List<PairingDAO>
     private lateinit var context: Context
@@ -62,24 +58,23 @@ class PdfCreator {
     private fun openDocument(document: PdfDocument) {
 
         try {
-            val file = File(context.getExternalFilesDir("/"), "Competition-" + competition.id + ".pdf")
+            val file =
+                File(context.getExternalFilesDir("/"), "Competition-" + competition.id + ".pdf")
             document.writeTo(FileOutputStream(file))
-//
-            val intent = Intent(Intent.ACTION_VIEW, file.toUri())
-//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-//            val apkURI = FileProvider.getUriForFile(
-//                context.applicationContext,
-//                context.packageName + ".provider",
-//                file
-//            )
-//            intent.setDataAndType(apkURI, "application/pdf")
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+            val photoURI = FileProvider.getUriForFile(
+                context,
+                context.applicationContext.packageName + ".provider",
+                file
+            )
+
+            val intent = Intent(Intent.ACTION_VIEW, photoURI)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
             startActivity(context, intent, null)
         }
         catch (e: Exception) {
-            e.printStackTrace()
-            // Instruct the user to install a PDF reader here, or something
+            Util.showOkButtonMessage(context, context.getString(R.string.pdf_cannot_be_opened))
         }
     }
 }

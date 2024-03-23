@@ -12,7 +12,7 @@ class DrawUtil {
         fun drawCompetitionsFirstRound(competition: CompetitionDAO, context: Context,
                                        finishText: String) {
 
-            val teamIds: MutableList<Int> = mutableListOf();
+            val teamIds: MutableList<Int> = mutableListOf()
             competition.teamRelations.forEach { relation -> teamIds.add(relation.teamId) }
 
             val drawHelper = DrawHelper(teamIds)
@@ -37,7 +37,7 @@ class DrawUtil {
         fun drawNextRound(competitionId: Int, pairings: MutableList<PairingDAO>, context: Context,
                           newRound: Int, finishText: String) {
 
-            val teamIds: MutableList<Int> = getWinners(pairings);
+            val teamIds: MutableList<Int> = getWinners(pairings)
 
             val drawHelper = DrawHelper(teamIds)
             val newPairings: List<PairingDAO> = drawHelper.draw()

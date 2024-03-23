@@ -1,5 +1,7 @@
 package de.herrmann.tippkick.spielrundenverwaltung.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,10 +74,7 @@ public class CompetitionDAO {
         return startedAt;
     }
 
-    public void setStartedAt(Date startedAt) {
-        this.startedAt = startedAt;
-    }
-
+    @NonNull
     @Override
     public String toString() {
         return name + " (" + competitionType.toString() + ")";
@@ -83,10 +82,6 @@ public class CompetitionDAO {
 
     public List<CompetitionTeamsRelationDAO> getTeamRelations() {
         return teamRelations;
-    }
-
-    public void addTeamRelation(CompetitionTeamsRelationDAO relation) {
-        this.teamRelations.add(relation);
     }
 
     public void addTeamRelations(List<CompetitionTeamsRelationDAO> relations) {

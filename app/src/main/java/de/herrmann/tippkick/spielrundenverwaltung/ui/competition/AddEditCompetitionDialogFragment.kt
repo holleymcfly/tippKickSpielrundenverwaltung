@@ -19,12 +19,12 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import de.herrmann.tippkick.spielrundenverwaltung.R
+import de.herrmann.tippkick.spielrundenverwaltung.logic.DrawUtil
 import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionDAO
 import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionTeamsRelationDAO
 import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionType
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.CompetitionsDBAccess
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.CompetitionsTeamsRelationDBAccess
-import de.herrmann.tippkick.spielrundenverwaltung.logic.DrawUtil
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.PairingDBAccess
 
 class AddEditCompetitionDialogFragment : DialogFragment() {
@@ -125,7 +125,7 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
         pairingDBAccess.deletePairingsForCompetition(requireContext(), competition!!.id)
 
         val competitionDBAccess = CompetitionsDBAccess()
-        competitionDBAccess.deleteCompetition(requireContext(), competition!!.id);
+        competitionDBAccess.deleteCompetition(requireContext(), competition!!.id)
         dismiss()
         callback.run()
     }

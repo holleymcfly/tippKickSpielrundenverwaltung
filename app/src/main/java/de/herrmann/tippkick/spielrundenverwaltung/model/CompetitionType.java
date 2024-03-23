@@ -18,11 +18,6 @@ public enum CompetitionType {
         return this.name;
     }
 
-    public boolean isValidNumberOfTeams(int numberOfTeams) {
-        return numberOfTeams == 2 || numberOfTeams == 4 || numberOfTeams == 8 || numberOfTeams == 16
-                || numberOfTeams == 32 || numberOfTeams == 64;
-    }
-
     public static CompetitionType getEnum(String value) {
         for(CompetitionType v : values()) {
             if (v.name.equalsIgnoreCase(value)) {

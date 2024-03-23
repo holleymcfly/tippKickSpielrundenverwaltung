@@ -16,7 +16,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import de.herrmann.tippkick.spielrundenverwaltung.R
 import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionDAO
-import de.herrmann.tippkick.spielrundenverwaltung.model.PairingDAO
 import de.herrmann.tippkick.spielrundenverwaltung.model.PrintItemType
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.CompetitionsDBAccess
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.PairingDBAccess
@@ -54,7 +53,7 @@ class PrintFragment : DialogFragment() {
 
         val typeSpinner: Spinner = view.findViewById(R.id.type_spinner)
         val type = typeSpinner.selectedItem.toString()
-        if (PrintItemType.COMPETITION.toString().equals(type)) {
+        if (PrintItemType.COMPETITION.toString() == type) {
             startCreateCompetitionPdf(view)
         }
     }

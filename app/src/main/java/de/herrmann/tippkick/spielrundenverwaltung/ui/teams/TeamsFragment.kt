@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import de.herrmann.tippkick.spielrundenverwaltung.R
 import de.herrmann.tippkick.spielrundenverwaltung.databinding.FragmentTeamsBinding
-import de.herrmann.tippkick.spielrundenverwaltung.persistence.TeamsDBAccess
 import de.herrmann.tippkick.spielrundenverwaltung.model.TeamDAO
+import de.herrmann.tippkick.spielrundenverwaltung.persistence.TeamsDBAccess
 import de.herrmann.tippkick.spielrundenverwaltung.util.Util
 
 
@@ -53,7 +53,7 @@ class TeamsFragment : Fragment() {
 
             importTeams()
 
-            textView.setText("")
+            textView.text = ""
         }
         else {
             val teamsList = binding.teamsList

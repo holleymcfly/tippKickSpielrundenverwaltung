@@ -15,11 +15,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import de.herrmann.tippkick.spielrundenverwaltung.R
 import de.herrmann.tippkick.spielrundenverwaltung.databinding.FragmentPlayBinding
+import de.herrmann.tippkick.spielrundenverwaltung.logic.DrawUtil
 import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionDAO
 import de.herrmann.tippkick.spielrundenverwaltung.model.PairingDAO
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.CompetitionsDBAccess
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.PairingDBAccess
-import de.herrmann.tippkick.spielrundenverwaltung.logic.DrawUtil
 import de.herrmann.tippkick.spielrundenverwaltung.util.Util
 
 class PlayFragment : Fragment() {
@@ -29,12 +29,12 @@ class PlayFragment : Fragment() {
 
     private var currentPairings: MutableList<PairingDAO> = mutableListOf()
     private var currentCompetition: CompetitionDAO? = null
-    private var currentPairingsRound: Int = 0;
+    private var currentPairingsRound: Int = 0
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -59,8 +59,10 @@ class PlayFragment : Fragment() {
 
         binding.drawNextRound.setOnClickListener {
             currentPairingsRound += 1
-            DrawUtil.drawNextRound(currentCompetition!!.id, currentPairings, requireContext(),
-                currentPairingsRound, getString(R.string.drawing_next_round_finished));
+            DrawUtil.drawNextRound(
+                currentCompetition!!.id, currentPairings, requireContext(),
+                currentPairingsRound, getString(R.string.drawing_next_round_finished)
+            )
             loadPairingsForCurrentRound()
         }
 
@@ -103,11 +105,12 @@ class PlayFragment : Fragment() {
     private fun loadCompetitions(): Boolean {
 
         val competitionsDBAccess = CompetitionsDBAccess()
-        val allCompetitions: List<CompetitionDAO> = competitionsDBAccess.getAllCompetitions(requireContext())
+        val allCompetitions: List<CompetitionDAO> =
+            competitionsDBAccess.getAllCompetitions(requireContext())
 
         val arraySpinner = mutableListOf<CompetitionDAO>()
 
-        allCompetitions.forEach {competition ->
+        allCompetitions.forEach { competition ->
             if (competition.isStarted) {
                 arraySpinner.add(competition)
             }
@@ -129,8 +132,10 @@ class PlayFragment : Fragment() {
         currentCompetition = competitionSpinner.selectedItem as CompetitionDAO
 
         val pairingsDBAccess = PairingDBAccess()
-        val pairings: List<PairingDAO> = pairingsDBAccess.getPairingsForCompetition(requireContext(),
-            currentCompetition!!.id, currentPairingsRound)
+        val pairings: List<PairingDAO> = pairingsDBAccess.getPairingsForCompetition(
+            requireContext(),
+            currentCompetition!!.id, currentPairingsRound
+        )
         for (pairing in pairings) {
             pairing.setContext(requireContext())
         }
@@ -155,10 +160,13 @@ class PlayFragment : Fragment() {
 
     private fun showEditPairingPopup(pairing: PairingDAO) {
 
-        val existsNextRound = Util.existsNextRound(currentCompetition!!, currentPairingsRound,
-            requireContext());
+        val existsNextRound = Util.existsNextRound(
+            currentCompetition!!, currentPairingsRound,
+            requireContext()
+        )
         val pairingIsFinalAndFinished = currentPairings.size == 1 && pairing.isFinished
-        val pairingDialog = EditPairingDialogFragment(pairing, existsNextRound || pairingIsFinalAndFinished)
+        val pairingDialog =
+            EditPairingDialogFragment(pairing, existsNextRound || pairingIsFinalAndFinished)
         pairingDialog.callback = Runnable {
             run {
                 loadPairingsForCurrentRound()
@@ -172,29 +180,23 @@ class PlayFragment : Fragment() {
     private fun setCompetitionRoundName() {
 
         val roundText: TextView = binding.roundText
-        if (currentPairings.size == 1) {
-            roundText.setText(R.string.final_)
-        }
-        else if (currentPairings.size == 2) {
-            roundText.setText(R.string.semi_final)
-        }
-        else if (currentPairings.size == 4) {
-            roundText.setText(R.string.quarter_final)
-        }
-        else if (currentPairings.size == 8) {
-            roundText.setText(R.string.round_of_16)
-        }
-        else {
-            val text: String = getText(R.string.round).toString() + " " +
-                    currentPairings.get(0).round
-            roundText.setText(text)
+        when (currentPairings.size) {
+            1 -> roundText.setText(R.string.final_)
+            2 -> roundText.setText(R.string.semi_final)
+            4 -> roundText.setText(R.string.quarter_final)
+            8 -> roundText.setText(R.string.round_of_16)
+            else -> {
+                val text: String = getText(R.string.round).toString() + " " +
+                        currentPairings[0].round
+                roundText.text = text
+            }
         }
     }
 
     private fun setNextPreviousButtonsEnabledDisabled() {
 
         val previousButton = binding.previousRound
-        if (currentPairings.isNotEmpty() && currentPairings.get(0).round > 1) {
+        if (currentPairings.isNotEmpty() && currentPairings[0].round > 1) {
             previousButton.isEnabled = true
             previousButton.setBackgroundColor(Color.parseColor("#6200EE"))
         }
@@ -210,8 +212,10 @@ class PlayFragment : Fragment() {
         }
         else {
             val pairingDBAccess = PairingDBAccess()
-            val nextRoundPairings = pairingDBAccess.getPairingsForCompetition(requireContext(),
-                currentCompetition!!.id, currentPairings.get(0).round+1)
+            val nextRoundPairings = pairingDBAccess.getPairingsForCompetition(
+                requireContext(),
+                currentCompetition!!.id, currentPairings[0].round + 1
+            )
             nextButton.isEnabled = nextRoundPairings.isNotEmpty()
             if (nextRoundPairings.isEmpty()) {
                 nextButton.setBackgroundColor(Color.parseColor("#C0C0C0"))
@@ -226,23 +230,19 @@ class PlayFragment : Fragment() {
 
         this.currentPairings.forEach {
             if (!it.isFinished) {
-                return false;
+                return false
             }
         }
 
-        return true;
+        return true
     }
 
     private fun setDrawNextRoundVisibility() {
 
         val drawNextRound: Button = binding.drawNextRound
         val existsNextRound = currentCompetition != null &&
-                Util.existsNextRound(currentCompetition!!, currentPairingsRound, requireContext());
-        if (roundFinished() && this.currentPairings.size > 1 && !existsNextRound) {
-            drawNextRound.isVisible = true
-        }
-        else {
-            drawNextRound.isVisible = false
-        }
+                Util.existsNextRound(currentCompetition!!, currentPairingsRound, requireContext())
+        drawNextRound.isVisible =
+            roundFinished() && this.currentPairings.size > 1 && !existsNextRound
     }
 }

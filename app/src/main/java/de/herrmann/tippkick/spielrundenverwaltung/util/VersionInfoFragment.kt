@@ -6,13 +6,10 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import de.herrmann.tippkick.spielrundenverwaltung.R
-import de.herrmann.tippkick.spielrundenverwaltung.persistence.TeamsDBAccess
 
 class VersionInfoFragment : DialogFragment() {
 
