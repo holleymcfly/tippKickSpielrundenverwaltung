@@ -4,8 +4,12 @@ import android.app.AlertDialog
 import android.content.Context
 import de.herrmann.tippkick.spielrundenverwaltung.R
 import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionDAO
+import de.herrmann.tippkick.spielrundenverwaltung.model.PairingDAO
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.CompetitionsDBAccess
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.PairingDBAccess
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class Util {
     companion object {
@@ -17,19 +21,27 @@ class Util {
             builder.show()
         }
 
-        fun existsNextRound(competition: CompetitionDAO, currentRound: Int, context: Context) : Boolean {
+        fun existsNextRound(
+            competition: CompetitionDAO,
+            currentRound: Int,
+            context: Context
+        ): Boolean {
 
             val pairingDBAccess = PairingDBAccess()
-            val pairingsNextRound = pairingDBAccess.getPairingsForCompetition(context,
-                competition.id, currentRound+1)
+            val pairingsNextRound = pairingDBAccess.getPairingsForCompetition(
+                context,
+                competition.id, currentRound + 1
+            )
             return pairingsNextRound.size > 0
         }
 
         fun isCompetitionFinished(competitionId: Int, context: Context): Boolean {
 
             val pairingDBAccess = PairingDBAccess()
-            val numberOfFinishedPairings = pairingDBAccess.getNumberOfFinishedPairingsForCompetition(
-                context, competitionId)
+            val numberOfFinishedPairings =
+                pairingDBAccess.getNumberOfFinishedPairingsForCompetition(
+                    context, competitionId
+                )
 
             val competitionsDBAccess = CompetitionsDBAccess()
             val competition = competitionsDBAccess.getCompetitionById(context, competitionId)
@@ -40,7 +52,32 @@ class Util {
             return numberOfFinishedPairings == numberOfRequiredPairings
         }
 
-        fun getAllTeamsList() : MutableList<String> {
+        fun toDateString(date: Date): String {
+
+            val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY)
+            return formatter.format(date)
+        }
+
+        fun toDateTimeString(date: Date): String {
+
+            val formatter = SimpleDateFormat("dd.MM.yyyy, HH:mm:ss", Locale.GERMANY)
+            return formatter.format(date)
+        }
+
+        fun getRoundTitle(context: Context, pairings: List<PairingDAO>): String {
+
+            return when (pairings.size) {
+                1 -> context.getString(R.string.final_)
+                2 -> context.getString(R.string.semi_final)
+                4 -> context.getString(R.string.quarter_final)
+                8 -> context.getString(R.string.round_of_16)
+                else -> {
+                    return context.getText(R.string.round).toString() + " " + pairings[0].round
+                }
+            }
+        }
+
+        fun getAllTeamsList(): MutableList<String> {
 
             val allTeams = mutableListOf<String>()
 

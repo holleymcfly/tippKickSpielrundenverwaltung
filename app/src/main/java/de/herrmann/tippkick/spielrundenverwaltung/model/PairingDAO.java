@@ -198,6 +198,27 @@ public class PairingDAO {
         return text;
     }
 
+    public String toResultOnly() {
+
+        String text = "";
+
+        if (this.goalsHome > -1 && this.goalsAway > -1) {
+            text += this.goalsHome + " : " + this.goalsAway;
+        }
+        else {
+            text += "- : -";
+        }
+
+        if (isPenalty) {
+            text += "  n.E.";
+        }
+        else if (isExtraTime) {
+            text += "  n.V.";
+        }
+
+        return text;
+    }
+
     public boolean hasHomeGoalsSet() {
         return goalsHome > -1;
     }

@@ -180,17 +180,7 @@ class PlayFragment : Fragment() {
     private fun setCompetitionRoundName() {
 
         val roundText: TextView = binding.roundText
-        when (currentPairings.size) {
-            1 -> roundText.setText(R.string.final_)
-            2 -> roundText.setText(R.string.semi_final)
-            4 -> roundText.setText(R.string.quarter_final)
-            8 -> roundText.setText(R.string.round_of_16)
-            else -> {
-                val text: String = getText(R.string.round).toString() + " " +
-                        currentPairings[0].round
-                roundText.text = text
-            }
-        }
+        roundText.text = Util.getRoundTitle(requireContext(), currentPairings)
     }
 
     private fun setNextPreviousButtonsEnabledDisabled() {
