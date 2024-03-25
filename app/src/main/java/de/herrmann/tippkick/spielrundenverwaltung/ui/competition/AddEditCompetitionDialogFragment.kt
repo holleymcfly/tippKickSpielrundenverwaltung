@@ -16,7 +16,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import de.herrmann.tippkick.spielrundenverwaltung.R
 import de.herrmann.tippkick.spielrundenverwaltung.logic.DrawUtil
@@ -46,27 +48,10 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
             val dialog = AlertDialog.Builder(requireContext()).setView(view).create()
 
             val competitionTypeSpinner: Spinner = view.findViewById(R.id.competition_type_spinner)
-            fillCompetitionTypeSpinner(competitionTypeSpinner)
+            fillCompetitionTypeSpinner(view, competitionTypeSpinner)
 
             val nameField: EditText = view.findViewById(R.id.eingabe)
-            if (!isNewCompetition()) {
-                nameField.setText(competition!!.name)
-            }
-            nameField.addTextChangedListener(object : TextWatcher {
-                override fun onTextChanged(cs: CharSequence?, arg1: Int, arg2: Int, arg3: Int) {
-                    setStartDrawingButtonEnabledDisabled(view)
-                }
-
-                override fun beforeTextChanged(
-                    arg0: CharSequence?,
-                    arg1: Int,
-                    arg2: Int,
-                    arg3: Int
-                ) {
-                }
-
-                override fun afterTextChanged(arg0: Editable?) {}
-            })
+            initNameField(view, nameField)
 
             val teamsButton: Button = view.findViewById(R.id.teams_list)
             loadNumberOfSelectedTeams()
@@ -75,6 +60,12 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
 
             val numberOfTeamsSpinner: Spinner = view.findViewById(R.id.number_of_teams_spinner)
             fillNumberOfTeamsSpinner(numberOfTeamsSpinner, view)
+
+            val numberOfGroupsSpinner: Spinner = view.findViewById(R.id.number_of_groups_spinner)
+            fillNumberOfGroupsSpinner(numberOfGroupsSpinner, view)
+
+            val numberOfTeamsPerGroupSpinner: Spinner = view.findViewById(R.id.number_of_teams_per_group_spinner)
+            fillNumberOfTeamsPerGroupSpinner(numberOfTeamsPerGroupSpinner, view)
 
             val cancelButton = view.findViewById<ImageButton>(R.id.cancel)
             cancelButton?.setOnClickListener {
@@ -89,7 +80,8 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
 
             val saveButton = view.findViewById<ImageButton>(R.id.add)
             saveButton?.setOnClickListener {
-                save(nameField, competitionTypeSpinner, numberOfTeamsSpinner, view)
+                save(nameField, competitionTypeSpinner, numberOfTeamsSpinner,
+                    numberOfGroupsSpinner, numberOfTeamsPerGroupSpinner, view)
                 Toast.makeText(context, R.string.competition_saved, Toast.LENGTH_LONG).show()
                 dismiss()
                 callback.run()
@@ -97,14 +89,38 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
 
             val startDrawingButton: Button = view.findViewById(R.id.finish_competition)
             startDrawingButton.setOnClickListener {
-                showFinishQuestion(nameField, competitionTypeSpinner, numberOfTeamsSpinner, view)
+                showFinishQuestion(nameField, competitionTypeSpinner, numberOfTeamsSpinner,
+                    numberOfGroupsSpinner, numberOfTeamsPerGroupSpinner, view)
             }
 
             setStartDrawingButtonEnabledDisabled(view)
             disableButtons(view, isStarted())
+            setTeamsSelectionVisibility(view)
 
             return dialog
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    private fun initNameField(view: View, nameField: EditText) {
+
+        if (!isNewCompetition()) {
+            nameField.setText(competition!!.name)
+        }
+        nameField.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(cs: CharSequence?, arg1: Int, arg2: Int, arg3: Int) {
+                setStartDrawingButtonEnabledDisabled(view)
+            }
+
+            override fun beforeTextChanged(
+                arg0: CharSequence?,
+                arg1: Int,
+                arg2: Int,
+                arg3: Int
+            ) {
+            }
+
+            override fun afterTextChanged(arg0: Editable?) {}
+        })
     }
 
     private fun showDeleteQuestion() {
@@ -183,26 +199,42 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
         }
     }
 
-    private fun fillCompetitionTypeSpinner(spinner: Spinner) {
+    private fun fillCompetitionTypeSpinner(globalView: View, spinner: Spinner) {
 
         val arraySpinner = arrayOf(
-            CompetitionType.DFB_POKAL.toString()
+            CompetitionType.DFB_POKAL, CompetitionType.GROUP_STAGE
         )
-        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+        val adapter: ArrayAdapter<CompetitionType> = ArrayAdapter<CompetitionType>(
             requireContext(), android.R.layout.simple_spinner_item, arraySpinner
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
 
         if (!isNewCompetition()) {
-            val spinnerPosition: Int = adapter.getPosition(competition!!.competitionType.toString())
+            val spinnerPosition: Int = adapter.getPosition(competition!!.competitionType)
             spinner.setSelection(spinnerPosition)
+        }
+
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                setTeamsSelectionVisibility(globalView)
+            }
         }
     }
 
     private fun save(
         nameField: EditText, competitionTypeSpinner: Spinner,
         numberOfTeamsSpinner: Spinner,
+        numberOfGroupsSpinner: Spinner,
+        numberOfTeamsPerGroupSpinner: Spinner,
         view: View
     ) {
         val competitionName = nameField.text.toString()
@@ -214,11 +246,14 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
             val selItem = competitionTypeSpinner.selectedItem
             val competitionType = CompetitionType.getEnum(selItem.toString())
             val numberOfTeams = Integer.parseInt(numberOfTeamsSpinner.selectedItem.toString())
+            val numberOfGroups = numberOfGroupsSpinner.selectedItem as Int
+            val numberOfTeamsPerGroup = numberOfTeamsPerGroupSpinner.selectedItem as Int
 
             val competitionDbAccess = CompetitionsDBAccess()
             if (isNewCompetition()) {
                 val newCompetitionId = competitionDbAccess.insertCompetition(
-                    requireContext(), competitionType, competitionName, numberOfTeams, false
+                    requireContext(), competitionType, competitionName, numberOfTeams,
+                    numberOfGroups, numberOfTeamsPerGroup, false
                 )
 
                 val competitionsTeamsRelationDBAccess = CompetitionsTeamsRelationDBAccess()
@@ -238,6 +273,8 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
                 competition!!.competitionType = competitionType
                 competition!!.name = competitionName
                 competition!!.numberOfTeams = numberOfTeams
+                competition!!.numberOfGroups = numberOfGroups
+                competition!!.numberOfTeamsPerGroup = numberOfTeamsPerGroup
 
                 competitionDbAccess.updateCompetition(requireContext(), competition)
 
@@ -245,6 +282,69 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
                 competitionsTeamsRelationDBAccess.updateCompetitionTeamRelationsForCompetition(
                     requireContext(), competition!!.id, competition!!.teamRelations
                 )
+            }
+        }
+    }
+
+    private fun fillNumberOfTeamsPerGroupSpinner(spinner: Spinner, mainView: View) {
+
+        val arraySpinner = arrayOf(
+            0, 3, 4, 5, 6
+        )
+
+        val adapter: ArrayAdapter<Int> = ArrayAdapter<Int>(
+            requireContext(), android.R.layout.simple_spinner_item, arraySpinner
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
+        if (!isNewCompetition()) {
+            val spinnerPosition: Int = adapter.getPosition(competition!!.numberOfTeamsPerGroup)
+            spinner.setSelection(spinnerPosition)
+        }
+
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                setStartDrawingButtonEnabledDisabled(mainView)
+            }
+        }
+    }
+
+    private fun fillNumberOfGroupsSpinner(spinner: Spinner, mainView: View) {
+
+        val arraySpinner = arrayOf(
+            0, 3, 4, 5, 6
+        )
+        val adapter: ArrayAdapter<Int> = ArrayAdapter<Int>(
+            requireContext(), android.R.layout.simple_spinner_item, arraySpinner
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
+        if (!isNewCompetition()) {
+            val spinnerPosition: Int = adapter.getPosition(competition!!.numberOfGroups)
+            spinner.setSelection(spinnerPosition)
+        }
+
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                setStartDrawingButtonEnabledDisabled(mainView)
             }
         }
     }
@@ -265,29 +365,52 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
             spinner.setSelection(spinnerPosition)
         }
 
-        try {
-            spinner.onItemSelectedListener = object : OnItemSelectedListener {
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
 
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    setStartDrawingButtonEnabledDisabled(mainView)
-                }
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                setStartDrawingButtonEnabledDisabled(mainView)
             }
-        }
-        catch (e: Exception) {
-            e.printStackTrace()
-            throw e
         }
     }
 
     private fun isNewCompetition(): Boolean {
         return competition!!.id == null
+    }
+
+    private fun setTeamsSelectionVisibility(view: View) {
+
+        // This is for CompetitionType.DFB_POKAL
+        val selectNumberOfTeamsText = view.findViewById<TextView>(R.id.number_of_teams_text)
+        val selectNumberOfTeamsSpinner = view.findViewById<Spinner>(R.id.number_of_teams_spinner)
+
+        // This is for CompetitionType.GROUP_STAGE
+        val selectNumberOfGroupsText = view.findViewById<TextView>(R.id.number_of_groups_text)
+        val selectNumberOfGroupsSpinner = view.findViewById<Spinner>(R.id.number_of_groups_spinner)
+        val selectNumberOfTeamsPerGroupText = view.findViewById<TextView>(R.id.number_of_teams_per_group_text)
+        val selectNumberOfTeamsPerGroupSpinner = view.findViewById<Spinner>(R.id.number_of_teams_per_group_spinner)
+
+        val isDFBPokal = CompetitionType.DFB_POKAL.equals(getSelectedCompetition(view))
+
+        selectNumberOfTeamsText.isVisible = isDFBPokal
+        selectNumberOfTeamsSpinner.isVisible = isDFBPokal
+
+        selectNumberOfGroupsText.isVisible = !isDFBPokal
+        selectNumberOfGroupsSpinner.isVisible = !isDFBPokal
+        selectNumberOfTeamsPerGroupText.isVisible = !isDFBPokal
+        selectNumberOfTeamsPerGroupSpinner.isVisible = !isDFBPokal
+    }
+
+    private fun getSelectedCompetition(view: View): CompetitionType {
+
+        val spinner = view.findViewById<Spinner>(R.id.competition_type_spinner)
+        return spinner.selectedItem as CompetitionType
     }
 
     private fun disableButtons(view: View, isStarted: Boolean) {
@@ -300,6 +423,12 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
 
         val numberOfTeamsSpinner: Spinner = view.findViewById(R.id.number_of_teams_spinner)
         numberOfTeamsSpinner.isEnabled = !isStarted
+
+        val numberOfGroupsSpinner: Spinner = view.findViewById(R.id.number_of_groups_spinner)
+        numberOfGroupsSpinner.isEnabled = !isStarted
+
+        val numberOfTeamsPerGroupSpinner: Spinner = view.findViewById(R.id.number_of_teams_per_group_spinner)
+        numberOfTeamsPerGroupSpinner.isEnabled = !isStarted
 
         val teamsButton: Button = view.findViewById(R.id.teams_list)
         teamsButton.isEnabled = !isStarted
@@ -342,7 +471,16 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
 
         // Don't activate if the number of teams is not the requested number.
         val numberOfTeamsSpinner: Spinner = view.findViewById(R.id.number_of_teams_spinner)
-        val numberOfTeams: Int = Integer.parseInt(numberOfTeamsSpinner.selectedItem.toString())
+        val numberOfGroupsSpinner: Spinner = view.findViewById(R.id.number_of_groups_spinner)
+        val numberOfTeamsPerGroupSpinner: Spinner = view.findViewById(R.id.number_of_teams_per_group_spinner)
+        val numberOfTeams = if (CompetitionType.DFB_POKAL.equals(getSelectedCompetition(view))) {
+            Integer.parseInt(numberOfTeamsSpinner.selectedItem.toString())
+        }
+        else {
+            Integer.parseInt(numberOfGroupsSpinner.selectedItem.toString()) *
+                    Integer.parseInt(numberOfTeamsPerGroupSpinner.selectedItem.toString())
+        }
+
         if (numberOfTeams != competition!!.teamRelations.size) {
             startDrawingButton.setBackgroundColor(Color.parseColor("#C0C0C0"))
             startDrawingButton.isEnabled = false
@@ -355,7 +493,10 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
 
     private fun showFinishQuestion(
         nameField: EditText, competitionTypeSpinner: Spinner,
-        numberOfTeamsSpinner: Spinner, view: View
+        numberOfTeamsSpinner: Spinner,
+        numberOfGroupsSpinner: Spinner,
+        numberOfTeamsPerGroupSpinner: Spinner,
+        view: View
     ) {
 
         val builder = AlertDialog.Builder(context)
@@ -363,7 +504,8 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
         builder.setMessage(R.string.start_drawing_question)
 
         builder.setPositiveButton(R.string.yes) { _, _ ->
-            save(nameField, competitionTypeSpinner, numberOfTeamsSpinner, view)
+            save(nameField, competitionTypeSpinner, numberOfTeamsSpinner, numberOfGroupsSpinner,
+                numberOfTeamsPerGroupSpinner, view)
             DrawUtil.drawCompetitionsFirstRound(competition!!, requireContext(), getString(R.string.drawing_finished))
             disableButtons(view, isStarted())
         }

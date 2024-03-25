@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 21;
     public static final String DATABASE_NAME = "spielrundenverwaltung";
 
     /**
@@ -28,6 +28,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COMPETITION_COLUMN_COMPETITION_TYPE = "competitionType";
     public static final String COMPETITION_COLUMN_NAME = "name";
     public static final String COMPETITION_COLUMN_NUMBER_OF_TEAMS = "numberOfTeams";
+    public static final String COMPETITION_COLUMN_NUMBER_OF_GROUPS = "numberOfGroups";
+    public static final String COMPETITION_COLUMN_NUMBER_OF_TEAMS_PER_GROUP = "numberOfTeamsPerGroup";
     public static final String COMPETITION_COLUMN_IS_STARTED = "isStarted";
     public static final String COMPETITION_COLUMN_STARTED_AT = "startedAt";
 
@@ -103,6 +105,12 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("ALTER TABLE " + PAIRING_TABLE_NAME +
                 " ADD " + PAIRING_COLUMN_DATE + " TEXT");
          */
+
+        // VERSION 2.0
+        sqLiteDatabase.execSQL("ALTER TABLE " + COMPETITION_TABLE_NAME +
+                " ADD " + COMPETITION_COLUMN_NUMBER_OF_GROUPS + " INTEGER");
+        sqLiteDatabase.execSQL("ALTER TABLE " + COMPETITION_TABLE_NAME +
+                " ADD " + COMPETITION_COLUMN_NUMBER_OF_TEAMS_PER_GROUP + " INTEGER");
     }
 
     public static String dateToUTCString(Date date) {

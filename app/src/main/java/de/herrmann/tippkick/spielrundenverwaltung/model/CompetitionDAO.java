@@ -12,6 +12,8 @@ public class CompetitionDAO {
     private CompetitionType competitionType;
     private String name;
     private Integer numberOfTeams = 0;
+    private Integer numberOfGroups = 0;
+    private Integer numberOfTeamsPerGroup = 0;
     private boolean isStarted = false;
     private Date startedAt;
 
@@ -29,11 +31,15 @@ public class CompetitionDAO {
     }
 
     public CompetitionDAO(Integer id, CompetitionType competitionType, String name,
-                          Integer numberOfTeams, boolean isStarted, Date startedAt) {
+                          Integer numberOfTeams, Integer numberOfGroups,
+                          Integer numberOfTeamsPerGroup, boolean isStarted,
+                          Date startedAt) {
         this.id = id;
         this.competitionType = competitionType;
         this.name = name;
         this.numberOfTeams = numberOfTeams;
+        this.numberOfGroups = numberOfGroups;
+        this.numberOfTeamsPerGroup = numberOfTeamsPerGroup;
         this.isStarted = isStarted;
         this.startedAt = startedAt;
     }
@@ -60,6 +66,22 @@ public class CompetitionDAO {
 
     public void setNumberOfTeams(Integer numberOfTeams) {
         this.numberOfTeams = numberOfTeams;
+    }
+
+    public Integer getNumberOfGroups() {
+        return numberOfGroups;
+    }
+
+    public void setNumberOfGroups(Integer numberOfGroups) {
+        this.numberOfGroups = numberOfGroups;
+    }
+
+    public Integer getNumberOfTeamsPerGroup() {
+        return numberOfTeamsPerGroup;
+    }
+
+    public void setNumberOfTeamsPerGroup(Integer numberOfTeamsPerGroup) {
+        this.numberOfTeamsPerGroup = numberOfTeamsPerGroup;
     }
 
     public boolean isStarted() {

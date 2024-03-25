@@ -10,15 +10,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionTeamsRelationDAO;
-import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionType;
 import de.herrmann.tippkick.spielrundenverwaltung.R;
 import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionDAO;
+import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionTeamsRelationDAO;
+import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionType;
 
 public class CompetitionsDBAccess {
 
     public long insertCompetition(Context context, CompetitionType competitionType, String name,
-                                  Integer numberOfTeams, boolean startNow) {
+                                  Integer numberOfTeams, Integer numberOfGroups,
+                                  Integer numberOfTeamsPerGroup, boolean startNow) {
 
         SQLiteDatabase database = new DBHelper(context).getWritableDatabase();
 
@@ -26,6 +27,8 @@ public class CompetitionsDBAccess {
         values.put(DBHelper.COMPETITION_COLUMN_COMPETITION_TYPE, competitionType.toString());
         values.put(DBHelper.COMPETITION_COLUMN_NAME, name);
         values.put(DBHelper.COMPETITION_COLUMN_NUMBER_OF_TEAMS, numberOfTeams);
+        values.put(DBHelper.COMPETITION_COLUMN_NUMBER_OF_GROUPS, numberOfGroups);
+        values.put(DBHelper.COMPETITION_COLUMN_NUMBER_OF_TEAMS_PER_GROUP, numberOfTeamsPerGroup);
         values.put(DBHelper.COMPETITION_COLUMN_IS_STARTED, startNow);
         if (startNow) {
             String date = DBHelper.dateToUTCString(new Date());
@@ -45,6 +48,8 @@ public class CompetitionsDBAccess {
                 DBHelper.COMPETITION_COLUMN_COMPETITION_TYPE,
                 DBHelper.COMPETITION_COLUMN_NAME,
                 DBHelper.COMPETITION_COLUMN_NUMBER_OF_TEAMS,
+                DBHelper.COMPETITION_COLUMN_NUMBER_OF_GROUPS,
+                DBHelper.COMPETITION_COLUMN_NUMBER_OF_TEAMS_PER_GROUP,
                 DBHelper.COMPETITION_COLUMN_IS_STARTED,
                 DBHelper.COMPETITION_COLUMN_STARTED_AT
         };
@@ -67,9 +72,11 @@ public class CompetitionsDBAccess {
             String competitionType = cursor.getString(1);
             String name = cursor.getString(2);
             Integer numberOfTeams = cursor.getInt(3);
-            int isStartedInt = cursor.getInt(4);
+            Integer numberOfGroups = cursor.getInt(4);
+            Integer numberOfTeamsPerGroup = cursor.getInt(5);
+            int isStartedInt = cursor.getInt(6);
             boolean isStarted = isStartedInt == 1;
-            String startedAtUTC = cursor.getString(5);
+            String startedAtUTC = cursor.getString(7);
 
             Date startedAt = null;
             if (startedAtUTC != null) {
@@ -81,7 +88,7 @@ public class CompetitionsDBAccess {
             List<CompetitionTeamsRelationDAO> teamRelations = teamsRelationDBAccess.
                     getCompetitionTeamRelationForCompetition(context, id);
             CompetitionDAO competition = new CompetitionDAO(id, CompetitionType.getEnum(competitionType),
-                    name, numberOfTeams, isStarted, startedAt);
+                    name, numberOfTeams, numberOfGroups, numberOfTeamsPerGroup, isStarted, startedAt);
             competition.addTeamRelations(teamRelations);
             return competition;
         }
@@ -100,6 +107,8 @@ public class CompetitionsDBAccess {
                 DBHelper.COMPETITION_COLUMN_COMPETITION_TYPE,
                 DBHelper.COMPETITION_COLUMN_NAME,
                 DBHelper.COMPETITION_COLUMN_NUMBER_OF_TEAMS,
+                DBHelper.COMPETITION_COLUMN_NUMBER_OF_GROUPS,
+                DBHelper.COMPETITION_COLUMN_NUMBER_OF_TEAMS_PER_GROUP,
                 DBHelper.COMPETITION_COLUMN_IS_STARTED,
                 DBHelper.COMPETITION_COLUMN_STARTED_AT
         };
@@ -120,16 +129,18 @@ public class CompetitionsDBAccess {
             String competitionType = cursor.getString(1);
             String name = cursor.getString(2);
             Integer numberOfTeams = cursor.getInt(3);
-            int isStartedInt = cursor.getInt(4);
+            Integer numberOfGroups = cursor.getInt(4);
+            Integer numberOfTeamsPerGroup = cursor.getInt(5);
+            int isStartedInt = cursor.getInt(6);
             boolean isStarted = isStartedInt == 1;
-            String startedAtUTC = cursor.getString(5);
+            String startedAtUTC = cursor.getString(7);
 
             Date startedAt = null;
             if (startedAtUTC != null) {
                 startedAt = DBHelper.uTCStringToDate(startedAtUTC);
             }
             allCompetitions.add(new CompetitionDAO(id, CompetitionType.getEnum(competitionType),
-                    name, numberOfTeams, isStarted, startedAt));
+                    name, numberOfTeams, numberOfGroups, numberOfTeamsPerGroup, isStarted, startedAt));
         }
         cursor.close();
         return allCompetitions;
@@ -152,6 +163,8 @@ public class CompetitionsDBAccess {
         values.put(DBHelper.COMPETITION_COLUMN_COMPETITION_TYPE, competition.getCompetitionType().toString());
         values.put(DBHelper.COMPETITION_COLUMN_NAME, competition.getName());
         values.put(DBHelper.COMPETITION_COLUMN_NUMBER_OF_TEAMS, competition.getNumberOfTeams());
+        values.put(DBHelper.COMPETITION_COLUMN_NUMBER_OF_GROUPS, competition.getNumberOfGroups());
+        values.put(DBHelper.COMPETITION_COLUMN_NUMBER_OF_TEAMS_PER_GROUP, competition.getNumberOfTeamsPerGroup());
         values.put(DBHelper.COMPETITION_COLUMN_IS_STARTED, competition.isStarted());
 
         // Only change started at date if the competition shall now be started.

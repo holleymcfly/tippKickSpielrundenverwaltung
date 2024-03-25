@@ -4,7 +4,8 @@ import androidx.annotation.NonNull;
 
 public enum CompetitionType {
 
-    DFB_POKAL ("DFB-Pokal");
+    DFB_POKAL ("DFB-Pokal"),
+    GROUP_STAGE ("Spiel mit Gruppenphase");
 
     private final String name;
 

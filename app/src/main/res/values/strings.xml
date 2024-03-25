@@ -33,7 +33,9 @@
 
     <!-- texts for competitions -->
     <string name="add_competition">Wettbewerb hinzufügen</string>
+    <string name="chose_number_of_groups">Wähle die Anzahl der Gruppen</string>
     <string name="chose_number_of_teams">Wähle die Anzahl der Vereine</string>
+    <string name="chose_number_of_teams_per_group">Wähle die Anzahl der Vereine je Gruppe</string>
     <string name="chose_competition_type">Wähle die Art des Wettbewerbs</string>
     <string name="competition_deleted">Der Wettbewerb wurde erfolgreich gelöscht.</string>
     <string name="competition_saved">Der Wettbewerb wurde erfolgreich gespeichert.</string>
