@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 24;
     public static final String DATABASE_NAME = "spielrundenverwaltung";
 
     /**
@@ -50,6 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String PAIRING_COLUMN_TEAM_ID_AWAY = "teamIdAway";
     public static final String PAIRING_COLUMN_COMPETITION_ID = "competitionId";
     public static final String PAIRING_COLUMN_ROUND = "round";
+    public static final String PAIRING_COLUMN_GROUP = "theGroup";
     public static final String PAIRING_COLUMN_GOALS_HOME = "goalsHome";
     public static final String PAIRING_COLUMN_GOALS_AWAY = "goalsAway";
     public static final String PAIRING_COLUMN_EXTRA_TIME = "extraTime";
@@ -71,6 +72,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 COMPETITION_COLUMN_COMPETITION_TYPE + " TEXT, " +
                 COMPETITION_COLUMN_NAME + " TEXT, " +
                 COMPETITION_COLUMN_NUMBER_OF_TEAMS + " INTEGER, " +
+                COMPETITION_COLUMN_NUMBER_OF_GROUPS + " INTEGER, " +
+                COMPETITION_COLUMN_NUMBER_OF_TEAMS_PER_GROUP + " INTEGER, " +
                 COMPETITION_COLUMN_IS_STARTED + " INTEGER, " +
                 COMPETITION_COLUMN_STARTED_AT + " TEXT" + ")");
         sqLiteDatabase.execSQL("CREATE TABLE " + COMPETITION_TEAMS_RELATION_TABLE_NAME + " (" +
@@ -83,22 +86,22 @@ public class DBHelper extends SQLiteOpenHelper {
                 PAIRING_COLUMN_TEAM_ID_AWAY + " INTEGER, " +
                 PAIRING_COLUMN_COMPETITION_ID + " INTEGER, " +
                 PAIRING_COLUMN_ROUND + " INTEGER, " +
+                PAIRING_COLUMN_GROUP + " INTEGER, " +
                 PAIRING_COLUMN_GOALS_HOME + " INTEGER, " +
                 PAIRING_COLUMN_GOALS_AWAY + " INTEGER," +
                 PAIRING_COLUMN_EXTRA_TIME + " INTEGER," +
-                PAIRING_COLUMN_PENALTY + " INTEGER" + ")");
-         **/
+                PAIRING_COLUMN_PENALTY + " INTEGER, " +
+                PAIRING_COLUMN_DATE + " TEXT" +  ")");
+         */
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        /*
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TEAM_TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + COMPETITION_TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + COMPETITION_TEAMS_RELATION_TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PAIRING_TABLE_NAME);
-        onCreate(sqLiteDatabase);
-        */
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TEAM_TABLE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + COMPETITION_TABLE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + COMPETITION_TEAMS_RELATION_TABLE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PAIRING_TABLE_NAME);
+//        onCreate(sqLiteDatabase);
 
         // VERSION 1.1
         /*
@@ -107,10 +110,14 @@ public class DBHelper extends SQLiteOpenHelper {
          */
 
         // VERSION 2.0
+        /*
         sqLiteDatabase.execSQL("ALTER TABLE " + COMPETITION_TABLE_NAME +
                 " ADD " + COMPETITION_COLUMN_NUMBER_OF_GROUPS + " INTEGER");
         sqLiteDatabase.execSQL("ALTER TABLE " + COMPETITION_TABLE_NAME +
                 " ADD " + COMPETITION_COLUMN_NUMBER_OF_TEAMS_PER_GROUP + " INTEGER");
+        sqLiteDatabase.execSQL("ALTER TABLE " + PAIRING_TABLE_NAME +
+                " ADD " + PAIRING_COLUMN_GROUP + " INTEGER");
+         */
     }
 
     public static String dateToUTCString(Date date) {

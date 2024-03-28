@@ -22,6 +22,7 @@ public class PairingDBAccess {
         values.put(DBHelper.PAIRING_COLUMN_TEAM_ID_AWAY, pairing.getTeamIdAway());
         values.put(DBHelper.PAIRING_COLUMN_COMPETITION_ID, pairing.getCompetitionId());
         values.put(DBHelper.PAIRING_COLUMN_ROUND, pairing.getRound());
+        values.put(DBHelper.PAIRING_COLUMN_GROUP, pairing.getGroup());
         values.put(DBHelper.PAIRING_COLUMN_GOALS_HOME, pairing.getGoalsHome());
         values.put(DBHelper.PAIRING_COLUMN_GOALS_AWAY, pairing.getGoalsAway());
         values.put(DBHelper.PAIRING_COLUMN_EXTRA_TIME, pairing.getExtraTime());
@@ -42,6 +43,7 @@ public class PairingDBAccess {
                 DBHelper.PAIRING_COLUMN_TEAM_ID_AWAY,
                 DBHelper.PAIRING_COLUMN_COMPETITION_ID,
                 DBHelper.PAIRING_COLUMN_ROUND,
+                DBHelper.PAIRING_COLUMN_GROUP,
                 DBHelper.PAIRING_COLUMN_GOALS_HOME,
                 DBHelper.PAIRING_COLUMN_GOALS_AWAY,
                 DBHelper.PAIRING_COLUMN_EXTRA_TIME,
@@ -80,15 +82,17 @@ public class PairingDBAccess {
             Integer teamIdAway = cursor.getInt(2);
             Integer compId = cursor.getInt(3);
             Integer rd = cursor.getInt(4);
-            Integer goalsHome = cursor.getInt(5);
-            Integer goalsAway = cursor.getInt(6);
-            Integer extraTime = cursor.getInt(7);
-            Integer penalty = cursor.getInt(8);
-            Date playDate = DBHelper.uTCStringToDate(cursor.getString(9));
+            Integer group = cursor.getInt(5);
+            Integer goalsHome = cursor.getInt(6);
+            Integer goalsAway = cursor.getInt(7);
+            Integer extraTime = cursor.getInt(8);
+            Integer penalty = cursor.getInt(9);
+            Date playDate = DBHelper.uTCStringToDate(cursor.getString(10));
 
-            allPairings.add(new PairingDAO(id, teamIdHome, teamIdAway, compId, rd,
+            allPairings.add(new PairingDAO(id, teamIdHome, teamIdAway, compId, rd, group,
                     goalsHome, goalsAway, extraTime, penalty, playDate));
         }
+
         cursor.close();
         return allPairings;
     }

@@ -289,7 +289,7 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
     private fun fillNumberOfTeamsPerGroupSpinner(spinner: Spinner, mainView: View) {
 
         val arraySpinner = arrayOf(
-            0, 3, 4, 5, 6
+            0, 4, 6
         )
 
         val adapter: ArrayAdapter<Int> = ArrayAdapter<Int>(

@@ -54,8 +54,8 @@ public class CompetitionsDBAccess {
                 DBHelper.COMPETITION_COLUMN_STARTED_AT
         };
 
-        String whereClause = DBHelper.COMPETITION_COLUMN_ID+"=?";
-        String [] whereArgs = {competitionId.toString()};
+        String whereClause = DBHelper.COMPETITION_COLUMN_ID + "=?";
+        String[] whereArgs = {competitionId.toString()};
 
         Cursor cursor = database.query(
                 DBHelper.COMPETITION_TABLE_NAME,
@@ -91,8 +91,7 @@ public class CompetitionsDBAccess {
                     name, numberOfTeams, numberOfGroups, numberOfTeamsPerGroup, isStarted, startedAt);
             competition.addTeamRelations(teamRelations);
             return competition;
-        }
-        else {
+        } else {
             cursor.close();
             return null;
         }
@@ -142,6 +141,7 @@ public class CompetitionsDBAccess {
             allCompetitions.add(new CompetitionDAO(id, CompetitionType.getEnum(competitionType),
                     name, numberOfTeams, numberOfGroups, numberOfTeamsPerGroup, isStarted, startedAt));
         }
+
         cursor.close();
         return allCompetitions;
     }

@@ -15,6 +15,7 @@ public class PairingDAO {
     private final Integer teamIdAway;
     private Integer competitionId;
     private Integer round;
+    private Integer group;
     private Integer goalsHome = -1;
     private Integer goalsAway = -1;
 
@@ -44,18 +45,25 @@ public class PairingDAO {
     }
 
     public PairingDAO(Integer id, Integer teamIdHome, Integer teamIdAway, Integer competitionId,
-                      Integer round, Integer goalsHome, Integer goalsAway, Integer extraTime,
-                      Integer penalty, Date playDate) {
+                      Integer round, Integer group, Integer goalsHome, Integer goalsAway,
+                      Integer extraTime, Integer penalty, Date playDate) {
         this.id = id;
         this.teamIdHome = teamIdHome;
         this.teamIdAway = teamIdAway;
         this.competitionId = competitionId;
         this.round = round;
+        this.group = group;
         this.goalsHome = goalsHome;
         this.goalsAway = goalsAway;
         this.isExtraTime = extraTime == 1;
         this.isPenalty = penalty == 1;
         this.playDate = playDate;
+    }
+
+    public PairingDAO reversePairing() {
+
+        return new PairingDAO(null, teamIdAway, teamIdHome, competitionId, round, group,
+                goalsHome, goalsAway, isExtraTime ? 1 : 0, isPenalty ? 1 : 0, playDate);
     }
 
     public Integer getTeamIdHome() {
@@ -80,6 +88,14 @@ public class PairingDAO {
 
     public void setRound(Integer round) {
         this.round = round;
+    }
+
+    public Integer getGroup() {
+        return group;
+    }
+
+    public void setGroup(Integer group) {
+        this.group = group;
     }
 
     public Integer getGoalsHome() {
