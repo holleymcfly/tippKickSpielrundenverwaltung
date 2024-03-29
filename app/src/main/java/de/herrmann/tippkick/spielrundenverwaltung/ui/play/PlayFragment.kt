@@ -17,7 +17,6 @@ import android.widget.TextView
 import androidx.core.view.allViews
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.google.android.material.tabs.TabLayout
 import de.herrmann.tippkick.spielrundenverwaltung.R
 import de.herrmann.tippkick.spielrundenverwaltung.databinding.FragmentPlayBinding
 import de.herrmann.tippkick.spielrundenverwaltung.logic.DrawUtil
@@ -234,26 +233,9 @@ class PlayFragment : Fragment() {
 
     private fun setTabsVisibility() {
 
-        if (currentCompetition!!.numberOfGroups < 6) {
-            binding.tabs.getTabAt(5)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED)
-        }
-        else {
-            binding.tabs.getTabAt(5)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED)
-        }
-
-        if (currentCompetition!!.numberOfGroups < 5) {
-            binding.tabs.getTabAt(4)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED)
-        }
-        else {
-            binding.tabs.getTabAt(4)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED)
-        }
-
-        if (currentCompetition!!.numberOfGroups < 4) {
-            binding.tabs.getTabAt(3)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED)
-        }
-        else {
-            binding.tabs.getTabAt(3)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED)
-        }
+        binding.tabs.getTabAt(5)!!.view.isVisible = (currentCompetition!!.numberOfGroups > 5)
+        binding.tabs.getTabAt(4)!!.view.isVisible = (currentCompetition!!.numberOfGroups > 4)
+        binding.tabs.getTabAt(3)!!.view.isVisible = (currentCompetition!!.numberOfGroups > 3)
     }
 
     private fun loadPairingsForGroup(pairings: List<PairingDAO>, groupPairingsList: ListView,
