@@ -58,7 +58,7 @@ class PlayFragment : Fragment() {
             loadPairingsForCurrentRound()
         }
 
-        binding.drawNextRound.setOnClickListener {
+        binding.drawNextRoundDfb.setOnClickListener {
             currentPairingsRound += 1
             DrawUtil.drawNextRound(
                 currentCompetition!!.id, currentPairings, requireContext(),
@@ -242,7 +242,7 @@ class PlayFragment : Fragment() {
 
     private fun setDrawNextRoundVisibility() {
 
-        val drawNextRound: Button = binding.drawNextRound
+        val drawNextRound: Button = binding.drawNextRoundDfb
         val existsNextRound = currentCompetition != null &&
                 Util.existsNextRound(currentCompetition!!, currentPairingsRound, requireContext())
         drawNextRound.isVisible =
