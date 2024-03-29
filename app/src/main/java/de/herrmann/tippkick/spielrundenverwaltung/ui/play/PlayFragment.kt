@@ -13,6 +13,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayout
 import de.herrmann.tippkick.spielrundenverwaltung.R
 import de.herrmann.tippkick.spielrundenverwaltung.databinding.FragmentPlayBinding
 import de.herrmann.tippkick.spielrundenverwaltung.logic.DrawUtil
@@ -31,6 +32,7 @@ class PlayFragment : Fragment() {
     private var currentPairings: MutableList<PairingDAO> = mutableListOf()
     private var currentCompetition: CompetitionDAO? = null
     private var currentPairingsRound: Int = 0
+    private var selectedGroup: Int = 1;
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,6 +77,42 @@ class PlayFragment : Fragment() {
         binding.nextRound.setOnClickListener {
             currentPairingsRound += 1
             loadPairingsForCurrentRound()
+        }
+
+        val tab1 = binding.tabs.getTabAt(0)
+        tab1?.view?.setOnClickListener {
+            selectedGroup = 1
+            setGroupsVisibility()
+        }
+
+        val tab2 = binding.tabs.getTabAt(1)
+        tab2?.view?.setOnClickListener {
+            selectedGroup = 2
+            setGroupsVisibility()
+        }
+
+        val tab3 = binding.tabs.getTabAt(2)
+        tab3?.view?.setOnClickListener {
+            selectedGroup = 3
+            setGroupsVisibility()
+        }
+
+        val tab4 = binding.tabs.getTabAt(3)
+        tab4?.view?.setOnClickListener {
+            selectedGroup = 4
+            setGroupsVisibility()
+        }
+
+        val tab5 = binding.tabs.getTabAt(4)
+        tab5?.view?.setOnClickListener {
+            selectedGroup = 5
+            setGroupsVisibility()
+        }
+
+        val tab6 = binding.tabs.getTabAt(5)
+        tab6?.view?.setOnClickListener {
+            selectedGroup = 6
+            setGroupsVisibility()
         }
 
         return root
@@ -153,14 +191,18 @@ class PlayFragment : Fragment() {
             }
         }
         else if (CompetitionType.GROUP_STAGE.equals(currentCompetition!!.competitionType)) {
-            val group1PairingsList: ListView = binding.pairingsListGroup1
-            val arrayAdapter: ArrayAdapter<PairingDAO> =
-                ArrayAdapter(requireContext(), R.layout.list_view_center_text, getPairingsOfGroup(
-                    pairings, 1))
-            group1PairingsList.adapter = arrayAdapter
-            group1PairingsList.setOnItemClickListener { _, _, position, _ ->
-                showEditPairingPopup(pairings[position])
-            }
+
+            selectedGroup = 1;
+
+            loadPairingsForGroup(pairings, binding.pairingsListGroup1, 1)
+            loadPairingsForGroup(pairings, binding.pairingsListGroup2, 2)
+            loadPairingsForGroup(pairings, binding.pairingsListGroup3, 3)
+            loadPairingsForGroup(pairings, binding.pairingsListGroup4, 4)
+            loadPairingsForGroup(pairings, binding.pairingsListGroup5, 5)
+            loadPairingsForGroup(pairings, binding.pairingsListGroup6,6)
+
+            setGroupsVisibility()
+            setTabsVisibility()
         }
 
         currentPairings.clear()
@@ -171,7 +213,53 @@ class PlayFragment : Fragment() {
         setDrawNextRoundVisibility()
     }
 
-    private fun getPairingsOfGroup(pairings: List<PairingDAO>, group: Int) : List<PairingDAO> {
+    private fun setTabsVisibility() {
+
+        if (currentCompetition!!.numberOfGroups < 6) {
+            binding.tabs.getTabAt(5)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED)
+        }
+        else {
+            binding.tabs.getTabAt(5)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED)
+        }
+
+        if (currentCompetition!!.numberOfGroups < 5) {
+            binding.tabs.getTabAt(4)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED)
+        }
+        else {
+            binding.tabs.getTabAt(4)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED)
+        }
+
+        if (currentCompetition!!.numberOfGroups < 4) {
+            binding.tabs.getTabAt(3)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED)
+        }
+        else {
+            binding.tabs.getTabAt(3)!!.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED)
+        }
+    }
+
+    private fun loadPairingsForGroup(pairings: List<PairingDAO>, groupPairingsList: ListView,
+                                     group: Int) {
+
+        val groupPairings = getPairingsOfGroup(pairings, group)
+        val arrayAdapter: ArrayAdapter<PairingDAO> =
+            ArrayAdapter(requireContext(), R.layout.list_view_center_text, groupPairings)
+        groupPairingsList.adapter = arrayAdapter
+        groupPairingsList.setOnItemClickListener { _, _, position, _ ->
+            showEditPairingPopup(groupPairings[position])
+        }
+    }
+
+    private fun setGroupsVisibility() {
+
+        binding.group1.isVisible = (selectedGroup == 1)
+        binding.group2.isVisible = (selectedGroup == 2)
+        binding.group3.isVisible = (selectedGroup == 3)
+        binding.group4.isVisible = (selectedGroup == 4)
+        binding.group5.isVisible = (selectedGroup == 5)
+        binding.group6.isVisible = (selectedGroup == 6)
+    }
+
+    private fun getPairingsOfGroup(pairings: List<PairingDAO>, group: Int): List<PairingDAO> {
 
         val pairingsOfGroup = mutableListOf<PairingDAO>()
         pairings.forEach { pairing ->
@@ -204,6 +292,7 @@ class PlayFragment : Fragment() {
         val pairingIsFinalAndFinished = currentPairings.size == 1 && pairing.isFinished
         val pairingDialog =
             EditPairingDialogFragment(pairing, existsNextRound || pairingIsFinalAndFinished)
+
         pairingDialog.callback = Runnable {
             run {
                 loadPairingsForCurrentRound()

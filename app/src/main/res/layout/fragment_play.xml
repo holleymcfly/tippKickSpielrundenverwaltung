@@ -121,6 +121,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            android:layout_marginTop="110dp">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="@string/group_1"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_height="wrap_content"
+                android:text="@string/group_2"
+                android:layout_width="match_parent"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_height="wrap_content"
+                android:text="@string/group_3"
+                android:layout_width="match_parent"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_height="wrap_content"
+                android:text="@string/group_4"
+                android:layout_width="match_parent"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_height="wrap_content"
+                android:text="@string/group_5"
+                android:layout_width="match_parent"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_height="wrap_content"
+                android:text="@string/group_6"
+                android:layout_width="match_parent"/>
+
+        </com.google.android.material.tabs.TabLayout>
+
         <LinearLayout
             android:id="@+id/group_1"
             android:layout_width="match_parent"
@@ -134,7 +173,6 @@
                 android:id="@+id/group_1_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="110dp"
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:text="@string/group_1"
@@ -148,7 +186,146 @@
                 android:layout_weight="5"
                 app:layout_constraintTop_toTopOf="parent">
             </ListView>
+        </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/group_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/group_2_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:text="@string/group_2"
+                android:layout_gravity="center"/>
+
+            <ListView
+                android:id="@+id/pairings_list_group_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="5"
+                app:layout_constraintTop_toTopOf="parent">
+            </ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/group_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/group_3_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:text="@string/group_3"
+                android:layout_gravity="center"/>
+
+            <ListView
+                android:id="@+id/pairings_list_group_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="5"
+                app:layout_constraintTop_toTopOf="parent">
+            </ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/group_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/group_4_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:text="@string/group_4"
+                android:layout_gravity="center"/>
+
+            <ListView
+                android:id="@+id/pairings_list_group_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="5"
+                app:layout_constraintTop_toTopOf="parent">
+            </ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/group_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/group_5_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:text="@string/group_5"
+                android:layout_gravity="center"/>
+
+            <ListView
+                android:id="@+id/pairings_list_group_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="5"
+                app:layout_constraintTop_toTopOf="parent">
+            </ListView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/group_6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/group_6_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:text="@string/group_6"
+                android:layout_gravity="center"/>
+
+            <ListView
+                android:id="@+id/pairings_list_group_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="5"
+                app:layout_constraintTop_toTopOf="parent">
+            </ListView>
         </LinearLayout>
 
     </LinearLayout>
