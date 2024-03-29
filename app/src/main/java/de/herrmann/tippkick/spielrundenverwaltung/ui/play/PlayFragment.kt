@@ -17,6 +17,7 @@ import de.herrmann.tippkick.spielrundenverwaltung.R
 import de.herrmann.tippkick.spielrundenverwaltung.databinding.FragmentPlayBinding
 import de.herrmann.tippkick.spielrundenverwaltung.logic.DrawUtil
 import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionDAO
+import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionType
 import de.herrmann.tippkick.spielrundenverwaltung.model.PairingDAO
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.CompetitionsDBAccess
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.PairingDBAccess
@@ -131,6 +132,8 @@ class PlayFragment : Fragment() {
         val competitionSpinner = binding.selectCompetition
         currentCompetition = competitionSpinner.selectedItem as CompetitionDAO
 
+        setCompetitionTypeView()
+
         val pairingsDBAccess = PairingDBAccess()
         val pairings: List<PairingDAO> = pairingsDBAccess.getPairingsForCompetition(
             requireContext(),
@@ -156,6 +159,16 @@ class PlayFragment : Fragment() {
         setCompetitionRoundName()
         setNextPreviousButtonsEnabledDisabled()
         setDrawNextRoundVisibility()
+    }
+
+    private fun setCompetitionTypeView() {
+
+        if (CompetitionType.DFB_POKAL.equals(currentCompetition!!.competitionType)) {
+            binding.layoutDfb.isVisible = true
+        }
+        else {
+            binding.layoutDfb.isVisible = false
+        }
     }
 
     private fun showEditPairingPopup(pairing: PairingDAO) {

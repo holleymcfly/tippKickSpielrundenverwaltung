@@ -69,17 +69,28 @@
 
         </RelativeLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_dfb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <ListView
             android:id="@+id/pairings_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="110dp"
             android:layout_weight="5"
             app:layout_constraintTop_toTopOf="parent">
         </ListView>
 
         <Button
-            android:id="@+id/draw_next_round"
+            android:id="@+id/draw_next_round_dfb"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="@string/draw_next_round"
