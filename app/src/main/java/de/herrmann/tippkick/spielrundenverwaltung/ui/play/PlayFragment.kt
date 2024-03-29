@@ -143,14 +143,24 @@ class PlayFragment : Fragment() {
             pairing.setContext(requireContext())
         }
 
-        val pairingsList: ListView = binding.pairingsList
-        val arrayAdapter: ArrayAdapter<PairingDAO> =
-            ArrayAdapter(requireContext(), R.layout.list_view_center_text, pairings)
-        pairingsList.adapter = arrayAdapter
-        pairingsList.setOnItemClickListener { _, _, position, _ ->
-
-            val pairing: PairingDAO = pairings[position]
-            showEditPairingPopup(pairing)
+        if (CompetitionType.DFB_POKAL.equals(currentCompetition!!.competitionType)) {
+            val pairingsList: ListView = binding.pairingsList
+            val arrayAdapter: ArrayAdapter<PairingDAO> =
+                ArrayAdapter(requireContext(), R.layout.list_view_center_text, pairings)
+            pairingsList.adapter = arrayAdapter
+            pairingsList.setOnItemClickListener { _, _, position, _ ->
+                showEditPairingPopup(pairings[position])
+            }
+        }
+        else if (CompetitionType.GROUP_STAGE.equals(currentCompetition!!.competitionType)) {
+            val group1PairingsList: ListView = binding.pairingsListGroup1
+            val arrayAdapter: ArrayAdapter<PairingDAO> =
+                ArrayAdapter(requireContext(), R.layout.list_view_center_text, getPairingsOfGroup(
+                    pairings, 1))
+            group1PairingsList.adapter = arrayAdapter
+            group1PairingsList.setOnItemClickListener { _, _, position, _ ->
+                showEditPairingPopup(pairings[position])
+            }
         }
 
         currentPairings.clear()
@@ -161,13 +171,27 @@ class PlayFragment : Fragment() {
         setDrawNextRoundVisibility()
     }
 
+    private fun getPairingsOfGroup(pairings: List<PairingDAO>, group: Int) : List<PairingDAO> {
+
+        val pairingsOfGroup = mutableListOf<PairingDAO>()
+        pairings.forEach { pairing ->
+            if (pairing.group == group) {
+                pairingsOfGroup.add(pairing)
+            }
+        }
+
+        return pairingsOfGroup
+    }
+
     private fun setCompetitionTypeView() {
 
         if (CompetitionType.DFB_POKAL.equals(currentCompetition!!.competitionType)) {
             binding.layoutDfb.isVisible = true
+            binding.layoutGroup.isVisible = false
         }
         else {
             binding.layoutDfb.isVisible = false
+            binding.layoutGroup.isVisible = true
         }
     }
 

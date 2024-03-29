@@ -57,6 +57,12 @@
     <string name="enter_valid_result">Bitte gib entweder ein gültiges Ergebnis ein oder leere das komplette Ergebnis.</string>
     <string name="extra_time">Verlängerung</string>
     <string name="final_">Finale</string>
+    <string name="group_1">Gruppe 1</string>
+    <string name="group_2">Gruppe 2</string>
+    <string name="group_3">Gruppe 3</string>
+    <string name="group_4">Gruppe 4</string>
+    <string name="group_5">Gruppe 5</string>
+    <string name="group_6">Gruppe 6</string>
     <string name="no_undecided_match">Dieses Spiel findet in einer KO-Runde statt. Es darf kein Unentschieden geben.</string>
     <string name="no_finished_competitions_yet">Es sind noch keine ausgelosten Wettbewerbe vorhanden.</string>
     <string name="penalty">Elfmeterschießen</string>
