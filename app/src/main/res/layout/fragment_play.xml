@@ -13,13 +13,13 @@
         android:layout_marginLeft="15dp"
         android:text="@string/chose_competition"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginTop="30dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -35,17 +35,17 @@
             android:id="@+id/LinearLayout02"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp">
 
             <ImageButton
                 android:id="@+id/previous_round"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/arrow_back_white"
                 android:layout_alignParentLeft="true"
-                android:background="#6200EE" />
+                android:layout_marginLeft="15dp"
+                android:background="#6200EE"
+                android:src="@drawable/arrow_back_white" />
 
             <TextView
                 android:id="@+id/round_text"
@@ -53,19 +53,19 @@
                 android:layout_height="40dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:textSize="20sp"
-                android:textAlignment="center"
                 android:gravity="center"
-                android:textFontWeight="400" />
+                android:textAlignment="center"
+                android:textFontWeight="400"
+                android:textSize="20sp" />
 
             <ImageButton
                 android:id="@+id/next_round"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/arrow_forward_white"
                 android:layout_alignParentRight="true"
-                android:background="#6200EE" />
+                android:layout_marginRight="15dp"
+                android:background="#6200EE"
+                android:src="@drawable/arrow_forward_white" />
 
         </RelativeLayout>
 
@@ -75,8 +75,8 @@
         android:id="@+id/layout_dfb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginTop="10dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -86,17 +86,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="110dp"
             android:layout_weight="5"
-            app:layout_constraintTop_toTopOf="parent">
-        </ListView>
+            app:layout_constraintTop_toTopOf="parent"></ListView>
 
         <Button
             android:id="@+id/draw_next_round_dfb"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="@string/draw_next_round"
-            android:layout_marginTop="30dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="15dp"
+            android:text="@string/draw_next_round"
             android:textColor="@color/white"
             app:backgroundTint="#6200EE" />
 
@@ -104,59 +103,77 @@
             android:id="@+id/no_competition_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="60dp"
             android:textAlignment="center"
-            android:textSize="20sp"
-            android:layout_gravity="center"/>
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginTop="10dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
-            android:layout_marginTop="110dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="110dp"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget">
 
             <com.google.android.material.tabs.TabItem
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="@string/group_1"/>
+                android:layout_height="wrap_content"
+                android:text="@string/group_1" />
 
             <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/group_2"
-                android:layout_width="match_parent"/>
+                android:text="@string/group_2" />
 
             <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/group_3"
-                android:layout_width="match_parent"/>
+                android:text="@string/group_3" />
 
             <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/group_4"
-                android:layout_width="match_parent"/>
+                android:text="@string/group_4" />
 
             <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/group_5"
-                android:layout_width="match_parent"/>
+                android:text="@string/group_5" />
 
             <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/group_6"
-                android:layout_width="match_parent"/>
+                android:text="@string/group_6" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs_group1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/matchday" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/table" />
 
         </com.google.android.material.tabs.TabLayout>
 
@@ -164,36 +181,140 @@
             android:id="@+id/group_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/group_1_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:text="@string/group_1"
-                android:layout_gravity="center"/>
+            android:orientation="vertical">
 
             <ListView
                 android:id="@+id/pairings_list_group_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp" />
+
+            <TableLayout
+                android:id="@+id/table_group_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
-                android:layout_weight="5"
-                app:layout_constraintTop_toTopOf="parent">
-            </ListView>
+                android:stretchColumns="1">
+
+                <TableRow>
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Platz"
+                        android:textFontWeight="900"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="start"
+                        android:padding="3dip"
+                        android:text="Mannschaft"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Sp."
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="S"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="U"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="N"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Tore"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Diff."
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Punkte"
+                        android:textSize="18dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="1" />
+
+                    <TextView
+                        android:gravity="start"
+                        android:padding="3dip"
+                        android:text="Mannschaft 1" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="2" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="2" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="0" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="0" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="5:2" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="3" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="6" />
+                </TableRow>
+            </TableLayout>
+
         </LinearLayout>
+
+
+
 
         <LinearLayout
             android:id="@+id/group_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="10dp"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -201,10 +322,10 @@
                 android:id="@+id/group_2_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="16sp"
+                android:layout_gravity="center"
                 android:text="@string/group_2"
-                android:layout_gravity="center"/>
+                android:textAlignment="center"
+                android:textSize="16sp" />
 
             <ListView
                 android:id="@+id/pairings_list_group_2"
@@ -212,16 +333,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_weight="5"
-                app:layout_constraintTop_toTopOf="parent">
-            </ListView>
+                app:layout_constraintTop_toTopOf="parent"></ListView>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/group_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="10dp"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -229,10 +349,10 @@
                 android:id="@+id/group_3_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="16sp"
+                android:layout_gravity="center"
                 android:text="@string/group_3"
-                android:layout_gravity="center"/>
+                android:textAlignment="center"
+                android:textSize="16sp" />
 
             <ListView
                 android:id="@+id/pairings_list_group_3"
@@ -240,16 +360,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_weight="5"
-                app:layout_constraintTop_toTopOf="parent">
-            </ListView>
+                app:layout_constraintTop_toTopOf="parent"></ListView>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/group_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="10dp"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -257,10 +376,10 @@
                 android:id="@+id/group_4_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="16sp"
+                android:layout_gravity="center"
                 android:text="@string/group_4"
-                android:layout_gravity="center"/>
+                android:textAlignment="center"
+                android:textSize="16sp" />
 
             <ListView
                 android:id="@+id/pairings_list_group_4"
@@ -268,16 +387,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_weight="5"
-                app:layout_constraintTop_toTopOf="parent">
-            </ListView>
+                app:layout_constraintTop_toTopOf="parent"></ListView>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/group_5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="10dp"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -285,10 +403,10 @@
                 android:id="@+id/group_5_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="16sp"
+                android:layout_gravity="center"
                 android:text="@string/group_5"
-                android:layout_gravity="center"/>
+                android:textAlignment="center"
+                android:textSize="16sp" />
 
             <ListView
                 android:id="@+id/pairings_list_group_5"
@@ -296,16 +414,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_weight="5"
-                app:layout_constraintTop_toTopOf="parent">
-            </ListView>
+                app:layout_constraintTop_toTopOf="parent"></ListView>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/group_6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="10dp"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -313,10 +430,10 @@
                 android:id="@+id/group_6_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="16sp"
+                android:layout_gravity="center"
                 android:text="@string/group_6"
-                android:layout_gravity="center"/>
+                android:textAlignment="center"
+                android:textSize="16sp" />
 
             <ListView
                 android:id="@+id/pairings_list_group_6"
@@ -324,8 +441,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_weight="5"
-                app:layout_constraintTop_toTopOf="parent">
-            </ListView>
+                app:layout_constraintTop_toTopOf="parent"></ListView>
         </LinearLayout>
 
     </LinearLayout>

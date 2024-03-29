@@ -33,6 +33,7 @@ class PlayFragment : Fragment() {
     private var currentCompetition: CompetitionDAO? = null
     private var currentPairingsRound: Int = 0
     private var selectedGroup: Int = 1;
+    private var isTableSelected: Boolean = false;
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -112,6 +113,18 @@ class PlayFragment : Fragment() {
         val tab6 = binding.tabs.getTabAt(5)
         tab6?.view?.setOnClickListener {
             selectedGroup = 6
+            setGroupsVisibility()
+        }
+
+        val tabGroup1Matchday = binding.tabsGroup1.getTabAt(0)
+        tabGroup1Matchday?.view?.setOnClickListener {
+            isTableSelected = false
+            setGroupsVisibility()
+        }
+
+        val tabGroup1Table = binding.tabsGroup1.getTabAt(1)
+        tabGroup1Table?.view?.setOnClickListener {
+            isTableSelected = true
             setGroupsVisibility()
         }
 
@@ -257,6 +270,9 @@ class PlayFragment : Fragment() {
         binding.group4.isVisible = (selectedGroup == 4)
         binding.group5.isVisible = (selectedGroup == 5)
         binding.group6.isVisible = (selectedGroup == 6)
+
+        binding.tableGroup1.isVisible = isTableSelected
+        binding.pairingsListGroup1.isVisible = !isTableSelected
     }
 
     private fun getPairingsOfGroup(pairings: List<PairingDAO>, group: Int): List<PairingDAO> {

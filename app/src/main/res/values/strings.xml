@@ -63,6 +63,7 @@
     <string name="group_4">Gruppe 4</string>
     <string name="group_5">Gruppe 5</string>
     <string name="group_6">Gruppe 6</string>
+    <string name="matchday">Spieltag</string>
     <string name="no_undecided_match">Dieses Spiel findet in einer KO-Runde statt. Es darf kein Unentschieden geben.</string>
     <string name="no_finished_competitions_yet">Es sind noch keine ausgelosten Wettbewerbe vorhanden.</string>
     <string name="penalty">Elfmeterschießen</string>
@@ -70,6 +71,7 @@
     <string name="round">Runde</string>
     <string name="round_of_16">Achtelfinale</string>
     <string name="semi_final">Halbfinale</string>
+    <string name="table">Tabelle</string>
 
     <!-- texts for menu functions -->
     <string name="pdf_cannot_be_opened">Die PDF-Datei kann nicht geöffnet werden. Eventuell hast Du keine App dafür installiert (z.B. Adobe Acrobat Reader für PDF)?</string>
