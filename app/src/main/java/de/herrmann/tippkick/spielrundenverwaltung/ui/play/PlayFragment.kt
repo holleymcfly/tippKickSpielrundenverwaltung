@@ -36,8 +36,8 @@ class PlayFragment : Fragment() {
     private var currentPairings: MutableList<PairingDAO> = mutableListOf()
     private var currentCompetition: CompetitionDAO? = null
     private var currentPairingsRound: Int = 0
-    private var selectedGroup: Int = 1;
-    private var isTableSelected: Boolean = false;
+    private var selectedGroup: Int = 1
+    private var isTableSelected: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,7 +67,7 @@ class PlayFragment : Fragment() {
 
         binding.drawNextRoundDfb.setOnClickListener {
             currentPairingsRound += 1
-            DrawUtil.drawNextRound(
+            DrawUtil.drawNextRoundDfb(
                 currentCompetition!!.id, currentPairings, requireContext(),
                 currentPairingsRound, getString(R.string.drawing_next_round_finished)
             )
@@ -198,7 +198,7 @@ class PlayFragment : Fragment() {
             pairing.setContext(requireContext())
         }
 
-        if (CompetitionType.DFB_POKAL.equals(currentCompetition!!.competitionType)) {
+        if (CompetitionType.DFB_POKAL == currentCompetition!!.competitionType) {
             val pairingsList: ListView = binding.pairingsList
             val arrayAdapter: ArrayAdapter<PairingDAO> =
                 ArrayAdapter(requireContext(), R.layout.list_view_center_text, pairings)
@@ -207,7 +207,7 @@ class PlayFragment : Fragment() {
                 showEditPairingPopup(pairings[position])
             }
         }
-        else if (CompetitionType.GROUP_STAGE.equals(currentCompetition!!.competitionType)) {
+        else if (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType) {
 
             loadPairingsForGroup(pairings, binding.pairingsListGroup1, 1)
             loadPairingsForGroup(pairings, binding.pairingsListGroup2, 2)
@@ -227,7 +227,7 @@ class PlayFragment : Fragment() {
         setNextPreviousButtonsEnabledDisabled()
         setDrawNextRoundVisibility()
 
-        if (CompetitionType.GROUP_STAGE.equals(currentCompetition!!.competitionType)) {
+        if (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType) {
             calculateAndFillTables()
         }
     }
@@ -305,7 +305,7 @@ class PlayFragment : Fragment() {
 
     private fun setCompetitionTypeView() {
 
-        if (CompetitionType.DFB_POKAL.equals(currentCompetition!!.competitionType)) {
+        if (CompetitionType.DFB_POKAL == currentCompetition!!.competitionType) {
             binding.layoutDfb.isVisible = true
             binding.layoutGroup.isVisible = false
         }
@@ -418,10 +418,11 @@ class PlayFragment : Fragment() {
         // Remove all generated rows, they will added right after that.
         val toRemoveView = mutableListOf<View>()
         for (view in tableGroup.allViews) {
-            if (R.id.header_row_1.equals(view.id) || R.id.header_row_2.equals(view.id) ||
-                R.id.header_row_3.equals(view.id) || R.id.header_row_4.equals(view.id) ||
-                R.id.header_row_5.equals(view.id) || R.id.header_row_6.equals(view.id)) {
-                continue;
+            if (R.id.header_row_1 == view.id || R.id.header_row_2 == view.id ||
+                R.id.header_row_3 == view.id || R.id.header_row_4 == view.id ||
+                R.id.header_row_5 == view.id || R.id.header_row_6 == view.id
+            ) {
+                continue
             }
 
             toRemoveView.add(view)
@@ -448,65 +449,64 @@ class PlayFragment : Fragment() {
         val positionText = TextView(requireContext())
         positionText.gravity = Gravity.CENTER
         positionText.setPadding(3, 3, 3, 3)
-        positionText.setText("0")
+        positionText.text = "0"
         positionText.textSize = 16F
         tableRow.addView(positionText)
 
         val teamText = TextView(requireContext())
         teamText.gravity = Gravity.START
         teamText.setPadding(3, 3, 3, 3)
-        teamText.setText(tableEntry.getTeamName())
+        teamText.text = tableEntry.getTeamName()
         teamText.textSize = 16F
         tableRow.addView(teamText)
 
         val matchesText = TextView(requireContext())
         matchesText.gravity = Gravity.CENTER
         matchesText.setPadding(3, 3, 3, 3)
-        matchesText.setText(tableEntry.getMatchCount().toString())
+        matchesText.text = tableEntry.getMatchCount().toString()
         matchesText.textSize = 16F
         tableRow.addView(matchesText)
 
         val winsText = TextView(requireContext())
         winsText.gravity = Gravity.CENTER
         winsText.setPadding(3, 3, 3, 3)
-        winsText.setText(tableEntry.getWins().toString())
+        winsText.text = tableEntry.getWins().toString()
         winsText.textSize = 16F
         tableRow.addView(winsText)
 
         val drawsText = TextView(requireContext())
         drawsText.gravity = Gravity.CENTER
         drawsText.setPadding(3, 3, 3, 3)
-        drawsText.setText(tableEntry.getDraws().toString())
+        drawsText.text = tableEntry.getDraws().toString()
         drawsText.textSize = 16F
         tableRow.addView(drawsText)
 
         val lostsText = TextView(requireContext())
         lostsText.gravity = Gravity.CENTER
         lostsText.setPadding(3, 3, 3, 3)
-        lostsText.setText(tableEntry.getLosts().toString())
+        lostsText.text = tableEntry.getLosts().toString()
         lostsText.textSize = 16F
         tableRow.addView(lostsText)
 
         val goalsText = TextView(requireContext())
         goalsText.gravity = Gravity.CENTER
         goalsText.setPadding(3, 3, 3, 3)
-        goalsText.setText(
+        goalsText.text =
             tableEntry.getGoalsShot().toString() + " : " + tableEntry.getGoalsConceded().toString()
-        )
         goalsText.textSize = 16F
         tableRow.addView(goalsText)
 
         val diffText = TextView(requireContext())
         diffText.gravity = Gravity.CENTER
         diffText.setPadding(3, 3, 3, 3)
-        diffText.setText((tableEntry.getGoalsShot() - tableEntry.getGoalsConceded()).toString())
+        diffText.text = (tableEntry.getGoalsShot() - tableEntry.getGoalsConceded()).toString()
         diffText.textSize = 16F
         tableRow.addView(diffText)
 
         val pointsText = TextView(requireContext())
         pointsText.gravity = Gravity.CENTER
         pointsText.setPadding(3, 3, 3, 3)
-        pointsText.setText(tableEntry.getPoints().toString())
+        pointsText.text = tableEntry.getPoints().toString()
         pointsText.textSize = 16F
         tableRow.addView(pointsText)
         return tableRow

@@ -14,11 +14,11 @@ class DrawUtil {
         fun drawCompetitionsFirstRound(competition: CompetitionDAO, context: Context,
                                       finishText: String) {
 
-            if (CompetitionType.DFB_POKAL.equals(competition.competitionType)) {
-                drawCompetitionsFirstRoundDFB(competition, context, finishText);
+            if (CompetitionType.DFB_POKAL == competition.competitionType) {
+                drawCompetitionsFirstRoundDFB(competition, context, finishText)
             }
-            else if (CompetitionType.GROUP_STAGE.equals(competition.competitionType)) {
-                drawCompetitionFirstRoundGroup(competition, context, finishText);
+            else if (CompetitionType.GROUP_STAGE == competition.competitionType) {
+                drawCompetitionFirstRoundGroup(competition, context, finishText)
             }
         }
 
@@ -27,38 +27,39 @@ class DrawUtil {
 
             val teamIds: MutableList<Int> = getAllTeamIds(competition)
 
-            val drawHelper = DrawHelper(teamIds)
-            val pairingsFirstLeg: List<PairingDAO> = drawHelper.draw()
-
-            var currentGroup = 1
-            var pairingInGroup = 1
-
-            for (pairing in pairingsFirstLeg) {
-
-                pairing.competitionId = competition.id
-                pairing.round = 1
-
-                pairing.group = currentGroup
-
-                if (pairingInGroup == competition.numberOfTeamsPerGroup / 2) {
-                    pairingInGroup = 1
-                    currentGroup++
-                }
-                else {
-                    pairingInGroup++
-                }
+            // Split up the teams in groups.
+            val teamIdsGroup1 = fillGroupList(competition, teamIds)
+            val teamIdsGroup2 = fillGroupList(competition, teamIds)
+            val teamIdsGroup3 = fillGroupList(competition, teamIds)
+            val teamIdsGroup4 = mutableListOf<Int>()
+            val teamIdsGroup5 = mutableListOf<Int>()
+            val teamIdsGroup6 = mutableListOf<Int>()
+            if (competition.numberOfGroups > 3) {
+                teamIdsGroup4.addAll(fillGroupList(competition, teamIds))
+            }
+            if (competition.numberOfGroups > 4) {
+                teamIdsGroup5.addAll(fillGroupList(competition, teamIds))
+            }
+            if (competition.numberOfGroups > 5) {
+                teamIdsGroup6.addAll(fillGroupList(competition, teamIds))
             }
 
-            val pairingsSecondLeg: List<PairingDAO> = getPairingsSecondLeg(pairingsFirstLeg)
+            // In each group every team has to play against every other team.
+            val allPairings = mutableListOf<PairingDAO>()
+            allPairings.addAll(createPairingsInGroup(teamIdsGroup1, 1, competition.id))
+            allPairings.addAll(createPairingsInGroup(teamIdsGroup2, 2, competition.id))
+            allPairings.addAll(createPairingsInGroup(teamIdsGroup3, 3, competition.id))
+            allPairings.addAll(createPairingsInGroup(teamIdsGroup4, 4, competition.id))
+            allPairings.addAll(createPairingsInGroup(teamIdsGroup5, 5, competition.id))
+            allPairings.addAll(createPairingsInGroup(teamIdsGroup6, 6, competition.id))
 
+            // Insert pairings in database.
             val pairingDBAccess = PairingDBAccess()
-            pairingsFirstLeg.forEach { pairing ->
-                pairingDBAccess.insertPairing(context, pairing)
-            }
-            pairingsSecondLeg.forEach { pairing ->
+            allPairings.forEach { pairing ->
                 pairingDBAccess.insertPairing(context, pairing)
             }
 
+            // Update competition with the "is started" info.
             competition.isStarted = true
             val competitionDBAccess = CompetitionsDBAccess()
             competitionDBAccess.updateCompetition(context, competition)
@@ -66,15 +67,45 @@ class DrawUtil {
             Util.showOkButtonMessage(context, finishText)
         }
 
-        fun getPairingsSecondLeg(pairings: List<PairingDAO>) : MutableList<PairingDAO> {
+        /**
+         * Creates all pairings in one group (the team ids that have been passed in the list).
+         * Returns a list of pairings, where each teams plays against each other team.
+         */
+        private fun createPairingsInGroup(teamIdsInGroup: List<Int>, group: Int, competitionId: Int):
+                MutableList<PairingDAO> {
 
-            val secondLegPairings = mutableListOf<PairingDAO>()
+            val pairings = mutableListOf<PairingDAO>()
+            for (i in 0..teamIdsInGroup.size) {
 
-            for (pairing in pairings) {
-                secondLegPairings.add(pairing.reversePairing())
+                for (j in i+1..<teamIdsInGroup.size) {
+
+                    val pairing = PairingDAO(teamIdsInGroup[i], teamIdsInGroup[j])
+                    pairing.round = 1
+                    pairing.group = group
+                    pairing.competitionId = competitionId
+
+                    pairings.add(pairing)
+                }
             }
 
-            return secondLegPairings
+            return pairings
+        }
+
+        /**
+         * Returns a list of team ids. The list is as big as the required number of teams that
+         * has been set in the competition definition.
+         * The used team ids are remove from the given list of all team ids.
+         */
+        private fun fillGroupList(competition: CompetitionDAO, teamIdsCopy: MutableList<Int>):
+                MutableList<Int> {
+
+            val groupList = mutableListOf<Int>()
+            for (count in 1..competition.numberOfTeamsPerGroup) {
+                val indexTeam: Int = (0..<teamIdsCopy.size).random()
+                groupList.add(teamIdsCopy[indexTeam])
+                teamIdsCopy.removeAt(indexTeam)
+            }
+            return groupList
         }
 
         private fun drawCompetitionsFirstRoundDFB(competition: CompetitionDAO, context: Context,
@@ -107,8 +138,8 @@ class DrawUtil {
             return teamIds
         }
 
-        fun drawNextRound(competitionId: Int, pairings: MutableList<PairingDAO>, context: Context,
-                          newRound: Int, finishText: String) {
+        fun drawNextRoundDfb(competitionId: Int, pairings: MutableList<PairingDAO>, context: Context,
+                             newRound: Int, finishText: String) {
 
             val teamIds: MutableList<Int> = getWinners(pairings)
 
