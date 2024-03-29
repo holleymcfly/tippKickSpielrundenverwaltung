@@ -20,7 +20,7 @@ class TableCalculator(private var context: Context, private var allPairings: Lis
 
         pairings.forEach { pairing ->
 
-            if (pairing.goalsHome != -1 && pairing.goalsAway == -1) {
+            if (pairing.goalsHome != -1 && pairing.goalsAway != -1) {
 
                 val teamHome: TableEntry = getTableEntryForId(tableEntries, pairing.teamIdHome)
                 val teamAway: TableEntry = getTableEntryForId(tableEntries, pairing.teamIdAway)
