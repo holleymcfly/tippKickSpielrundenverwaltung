@@ -7,7 +7,7 @@ class TableCalculator(private var context: Context, private var allPairings: Lis
                       private var group: Int) {
 
     private var pairings = mutableListOf<PairingDAO>()
-    fun calculate() : List<TableEntry> {
+    fun calculate(): List<TableEntry> {
 
         // Only regard pairings for the requested group.
         allPairings.forEach { pairing ->
@@ -49,7 +49,8 @@ class TableCalculator(private var context: Context, private var allPairings: Lis
             }
         }
 
-        return tableEntries
+        val sorted = tableEntries.sorted()
+        return sorted
     }
 
     private fun getTableEntryForEachTeam(): List<TableEntry> {

@@ -3,7 +3,7 @@ package de.herrmann.tippkick.spielrundenverwaltung.ui.play
 import android.content.Context
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.TeamsDBAccess
 
-class TableEntry(context: Context, private var teamId: Int) {
+class TableEntry(context: Context, private var teamId: Int): Comparable<TableEntry> {
 
     private var dbAccess = TeamsDBAccess()
     private var teamName: String = dbAccess.getTeamById(context, teamId).name
@@ -75,5 +75,41 @@ class TableEntry(context: Context, private var teamId: Int) {
 
     fun getPoints(): Int {
         return this.points
+    }
+
+    override fun compareTo(other: TableEntry): Int {
+
+        // First compare value are the points.
+        if (this.points > other.points) {
+            return -1
+        }
+        else if (this.points < other.points) {
+            return 1
+        }
+
+        // Second compare value is the goal difference
+        if ((this.goalsShot - this.goalsConceded) > (other.goalsShot - other.goalsConceded)) {
+            return -1
+        }
+        else if ((this.goalsShot - this.goalsConceded) < (other.goalsShot - other.goalsConceded)) {
+            return 1
+        }
+
+        // Third compare value is the amount of goals shot.
+        if (this.goalsShot > other.goalsShot) {
+            return -1
+        }
+        else if (this.goalsShot < other.goalsShot) {
+            return 1
+        }
+
+        // Everything is equal - draw the winner.
+        val random = (0..1).random()
+        return if (random == 0) {
+            1
+        }
+        else {
+            -1
+        }
     }
 }

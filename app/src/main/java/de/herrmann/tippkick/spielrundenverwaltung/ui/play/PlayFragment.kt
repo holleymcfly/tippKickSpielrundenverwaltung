@@ -417,21 +417,23 @@ class PlayFragment : Fragment() {
         // Generate new rows.
         val tableCalculator = TableCalculator(requireContext(), currentPairings, group)
         val tableEntries: List<TableEntry> = tableCalculator.calculate()
+
+        var position = 1
         for (tableEntry in tableEntries) {
 
-            val tableRow = createTableRowForView(tableEntry)
+            val tableRow = createTableRowForView(tableEntry, position++)
             tableGroup.addView(tableRow)
         }
     }
 
-    private fun createTableRowForView(tableEntry: TableEntry): TableRow {
+    private fun createTableRowForView(tableEntry: TableEntry, position: Int): TableRow {
 
         val tableRow = TableRow(requireContext())
 
         val positionText = TextView(requireContext())
         positionText.gravity = Gravity.CENTER
         positionText.setPadding(3, 3, 3, 3)
-        positionText.text = "0"
+        positionText.text = position.toString()
         positionText.textSize = 16F
         tableRow.addView(positionText)
 
