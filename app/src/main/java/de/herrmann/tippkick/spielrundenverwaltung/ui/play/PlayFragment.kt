@@ -305,7 +305,7 @@ class PlayFragment : Fragment() {
         )
         val pairingIsFinalAndFinished = currentPairings.size == 1 && pairing.isFinished
         val pairingDialog =
-            EditPairingDialogFragment(pairing, existsNextRound || pairingIsFinalAndFinished)
+            EditPairingDialogFragment(currentCompetition!!, pairing, existsNextRound || pairingIsFinalAndFinished)
 
         pairingDialog.callback = Runnable {
             run {

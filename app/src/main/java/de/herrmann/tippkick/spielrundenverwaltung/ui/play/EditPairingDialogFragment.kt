@@ -7,19 +7,23 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import de.herrmann.tippkick.spielrundenverwaltung.R
+import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionDAO
+import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionType
 import de.herrmann.tippkick.spielrundenverwaltung.model.PairingDAO
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.PairingDBAccess
 import de.herrmann.tippkick.spielrundenverwaltung.util.Util
-import android.view.inputmethod.EditorInfo
 
 
-class EditPairingDialogFragment(private val currentPairing: PairingDAO, private val isDisabled: Boolean) : DialogFragment() {
+class EditPairingDialogFragment(private val competition: CompetitionDAO,
+                                private val currentPairing: PairingDAO,
+                                private val isDisabled: Boolean) : DialogFragment() {
 
     lateinit var callback: Runnable
 
@@ -112,7 +116,7 @@ class EditPairingDialogFragment(private val currentPairing: PairingDAO, private 
             return
         }
 
-        if (goalsHome != -1 && goalsHome == goalsAway) {
+        if (goalsHome != -1 && goalsHome == goalsAway && CompetitionType.DFB_POKAL == competition.competitionType) {
             Util.showOkButtonMessage(requireContext(), getString(R.string.no_undecided_match))
             return
         }
