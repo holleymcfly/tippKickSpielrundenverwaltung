@@ -263,16 +263,27 @@ class PlayFragment : Fragment() {
     private fun setGroupsVisibility() {
 
         binding.pairingsListGroup1.isVisible = (selectedGroup == 1) && !isTableSelected
+        binding.distanceHolderGroup1.isVisible = (selectedGroup == 1) && !isTableSelected
         binding.tableViewGroup1.isVisible = (selectedGroup == 1) && isTableSelected
+
         binding.pairingsListGroup2.isVisible = (selectedGroup == 2) && !isTableSelected
+        binding.distanceHolderGroup2.isVisible = (selectedGroup == 2) && !isTableSelected
         binding.tableViewGroup2.isVisible = (selectedGroup == 2) && isTableSelected
+
         binding.pairingsListGroup3.isVisible = (selectedGroup == 3) && !isTableSelected
+        binding.distanceHolderGroup3.isVisible = (selectedGroup == 3) && !isTableSelected
         binding.tableViewGroup3.isVisible = (selectedGroup == 3) && isTableSelected
+
         binding.pairingsListGroup4.isVisible = (selectedGroup == 4) && !isTableSelected
+        binding.distanceHolderGroup4.isVisible = (selectedGroup == 4) && !isTableSelected
         binding.tableViewGroup4.isVisible = (selectedGroup == 4) && isTableSelected
+
         binding.pairingsListGroup5.isVisible = (selectedGroup == 5) && !isTableSelected
+        binding.distanceHolderGroup5.isVisible = (selectedGroup == 5) && !isTableSelected
         binding.tableViewGroup5.isVisible = (selectedGroup == 5) && isTableSelected
+
         binding.pairingsListGroup6.isVisible = (selectedGroup == 6) && !isTableSelected
+        binding.distanceHolderGroup6.isVisible = (selectedGroup == 6) && !isTableSelected
         binding.tableViewGroup6.isVisible = (selectedGroup == 6) && isTableSelected
     }
 
