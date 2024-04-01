@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TableLayout
@@ -54,7 +53,6 @@ class PlayFragment : Fragment() {
         if (!loadCompetitions()) {
             noCompetitionText.text = getText(R.string.no_finished_competitions_yet)
             competitionSpinner.isVisible = false
-            setDrawNextRoundVisibility()
             binding.previousRound.isVisible = false
             binding.nextRound.isVisible = false
             binding.selectCompetitionText.isVisible = false
@@ -64,23 +62,27 @@ class PlayFragment : Fragment() {
             loadPairingsForCurrentRound()
         }
 
-        binding.drawNextRoundDfb.setOnClickListener {
-            currentPairingsRound += 1
-            DrawUtil.drawNextRoundDfb(
-                currentCompetition!!.id, currentPairings, requireContext(),
-                currentPairingsRound, getString(R.string.drawing_next_round_finished)
-            )
-            loadPairingsForCurrentRound()
-        }
-
         binding.previousRound.setOnClickListener {
             currentPairingsRound -= 1
             loadPairingsForCurrentRound()
         }
 
         binding.nextRound.setOnClickListener {
-            currentPairingsRound += 1
-            loadPairingsForCurrentRound()
+
+            if (isDrawNextRoundEnabled()) {
+                if (isDfbCompetition()) {
+                    currentPairingsRound += 1
+                    DrawUtil.drawNextRoundDfb(
+                        currentCompetition!!.id, currentPairings, requireContext(),
+                        currentPairingsRound, getString(R.string.drawing_next_round_finished)
+                    )
+                    loadPairingsForCurrentRound()
+                }
+            }
+            else {
+                currentPairingsRound += 1
+                loadPairingsForCurrentRound()
+            }
         }
 
         val tab1 = binding.tabs.getTabAt(0)
@@ -132,6 +134,15 @@ class PlayFragment : Fragment() {
         }
 
         return root
+    }
+
+    private fun isDfbCompetition(): Boolean {
+
+        if (currentCompetition == null) {
+            return false;
+        }
+
+        return CompetitionType.DFB_POKAL == currentCompetition!!.competitionType
     }
 
     override fun onDestroyView() {
@@ -224,7 +235,6 @@ class PlayFragment : Fragment() {
 
         setCompetitionRoundName()
         setNextPreviousButtonsEnabledDisabled()
-        setDrawNextRoundVisibility()
 
         if (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType) {
             calculateAndFillTables()
@@ -252,25 +262,18 @@ class PlayFragment : Fragment() {
 
     private fun setGroupsVisibility() {
 
-        binding.group1.isVisible = (selectedGroup == 1)
-        binding.group2.isVisible = (selectedGroup == 2)
-        binding.group3.isVisible = (selectedGroup == 3)
-        binding.group4.isVisible = (selectedGroup == 4)
-        binding.group5.isVisible = (selectedGroup == 5)
-        binding.group6.isVisible = (selectedGroup == 6)
-
-        binding.tableGroup1.isVisible = isTableSelected
-        binding.pairingsListGroup1.isVisible = !isTableSelected
-        binding.tableGroup2.isVisible = isTableSelected
-        binding.pairingsListGroup2.isVisible = !isTableSelected
-        binding.tableGroup3.isVisible = isTableSelected
-        binding.pairingsListGroup3.isVisible = !isTableSelected
-        binding.tableGroup4.isVisible = isTableSelected
-        binding.pairingsListGroup4.isVisible = !isTableSelected
-        binding.tableGroup5.isVisible = isTableSelected
-        binding.pairingsListGroup5.isVisible = !isTableSelected
-        binding.tableGroup6.isVisible = isTableSelected
-        binding.pairingsListGroup6.isVisible = !isTableSelected
+        binding.pairingsListGroup1.isVisible = (selectedGroup == 1) && !isTableSelected
+        binding.tableViewGroup1.isVisible = (selectedGroup == 1) && isTableSelected
+        binding.pairingsListGroup2.isVisible = (selectedGroup == 2) && !isTableSelected
+        binding.tableViewGroup2.isVisible = (selectedGroup == 2) && isTableSelected
+        binding.pairingsListGroup3.isVisible = (selectedGroup == 3) && !isTableSelected
+        binding.tableViewGroup3.isVisible = (selectedGroup == 3) && isTableSelected
+        binding.pairingsListGroup4.isVisible = (selectedGroup == 4) && !isTableSelected
+        binding.tableViewGroup4.isVisible = (selectedGroup == 4) && isTableSelected
+        binding.pairingsListGroup5.isVisible = (selectedGroup == 5) && !isTableSelected
+        binding.tableViewGroup5.isVisible = (selectedGroup == 5) && isTableSelected
+        binding.pairingsListGroup6.isVisible = (selectedGroup == 6) && !isTableSelected
+        binding.tableViewGroup6.isVisible = (selectedGroup == 6) && isTableSelected
     }
 
     private fun getPairingsOfGroup(pairings: List<PairingDAO>, group: Int): List<PairingDAO> {
@@ -325,6 +328,52 @@ class PlayFragment : Fragment() {
 
     private fun setNextPreviousButtonsEnabledDisabled() {
 
+        setPreviousButtonEnabledDisabled()
+        setNextButtonEnabledDisabled()
+    }
+
+    private fun isDrawNextRoundEnabled(): Boolean {
+        val existsNextRound = Util.existsNextRound(currentCompetition!!, currentPairingsRound, requireContext())
+        return roundFinished() && !existsNextRound
+    }
+
+    private fun setNextButtonEnabledDisabled() {
+
+        val nextButton = binding.nextRound
+        if (currentPairings.isEmpty() || currentCompetition == null) {
+            nextButton.isEnabled = false
+            nextButton.setBackgroundColor(Color.parseColor("#C0C0C0"))
+            return
+        }
+
+        val pairingDBAccess = PairingDBAccess()
+        val nextRoundPairings = pairingDBAccess.getPairingsForCompetition(
+            requireContext(),
+            currentCompetition!!.id, currentPairings[0].round + 1
+        )
+
+        if (isDrawNextRoundEnabled()) {
+            // next round button is set to draw next round
+            nextButton.isEnabled = true
+            nextButton.setImageResource(R.drawable.draw_white)
+            nextButton.setBackgroundColor(Color.parseColor("#6200EE"))
+        }
+        else if (!nextRoundPairings.isEmpty()) {
+            // next round button enabled
+            nextButton.isEnabled = true
+            nextButton.setImageResource(R.drawable.arrow_forward_white)
+            nextButton.setBackgroundColor(Color.parseColor("#6200EE"))
+        }
+        else {
+            // next round button disabled
+            nextButton.isEnabled = false
+            nextButton.setImageResource(R.drawable.arrow_forward_white)
+            nextButton.setBackgroundColor(Color.parseColor("#C0C0C0"))
+        }
+    }
+
+    private fun setPreviousButtonEnabledDisabled() {
+
         val previousButton = binding.previousRound
         if (currentPairings.isNotEmpty() && currentPairings[0].round > 1) {
             previousButton.isEnabled = true
@@ -333,26 +382,6 @@ class PlayFragment : Fragment() {
         else {
             previousButton.isEnabled = false
             previousButton.setBackgroundColor(Color.parseColor("#C0C0C0"))
-        }
-
-        val nextButton = binding.nextRound
-        if (currentPairings.isEmpty() || currentCompetition == null) {
-            nextButton.isEnabled = false
-            nextButton.setBackgroundColor(Color.parseColor("#C0C0C0"))
-        }
-        else {
-            val pairingDBAccess = PairingDBAccess()
-            val nextRoundPairings = pairingDBAccess.getPairingsForCompetition(
-                requireContext(),
-                currentCompetition!!.id, currentPairings[0].round + 1
-            )
-            nextButton.isEnabled = nextRoundPairings.isNotEmpty()
-            if (nextRoundPairings.isEmpty()) {
-                nextButton.setBackgroundColor(Color.parseColor("#C0C0C0"))
-            }
-            else {
-                nextButton.setBackgroundColor(Color.parseColor("#6200EE"))
-            }
         }
     }
 
@@ -365,15 +394,6 @@ class PlayFragment : Fragment() {
         }
 
         return true
-    }
-
-    private fun setDrawNextRoundVisibility() {
-
-        val drawNextRound: Button = binding.drawNextRoundDfb
-        val existsNextRound = currentCompetition != null &&
-                Util.existsNextRound(currentCompetition!!, currentPairingsRound, requireContext())
-        drawNextRound.isVisible =
-            roundFinished() && this.currentPairings.size > 1 && !existsNextRound
     }
 
     private fun calculateAndFillTables() {
