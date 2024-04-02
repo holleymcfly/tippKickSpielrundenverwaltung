@@ -145,7 +145,7 @@ class PlayFragment : Fragment() {
     private fun isDfbCompetition(): Boolean {
 
         if (currentCompetition == null) {
-            return false;
+            return false
         }
 
         return CompetitionType.DFB_POKAL == currentCompetition!!.competitionType
@@ -154,10 +154,30 @@ class PlayFragment : Fragment() {
     private fun isGroupCompetition(): Boolean {
 
         if (currentCompetition == null) {
-            return false;
+            return false
         }
 
         return CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType
+    }
+
+    private fun isGroupCompetitionGroupRound(): Boolean {
+
+        if (currentCompetition == null) {
+            return false;
+        }
+
+        return (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType)
+                && currentPairingsRound == 1
+    }
+
+    private fun isGroupCompetitionKnockout(): Boolean {
+
+        if (currentCompetition == null) {
+            return false;
+        }
+
+        return (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType)
+                && currentPairingsRound > 1
     }
 
     override fun onDestroyView() {
@@ -223,7 +243,7 @@ class PlayFragment : Fragment() {
             pairing.setContext(requireContext())
         }
 
-        if (CompetitionType.DFB_POKAL == currentCompetition!!.competitionType) {
+        if (isDfbCompetition()) {
             val pairingsList: ListView = binding.pairingsList
             val arrayAdapter: ArrayAdapter<PairingDAO> =
                 ArrayAdapter(requireContext(), R.layout.list_view_center_text, pairings)
@@ -232,7 +252,7 @@ class PlayFragment : Fragment() {
                 showEditPairingPopup(pairings[position])
             }
         }
-        else if (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType) {
+        else if (isGroupCompetitionGroupRound()) {
 
             loadPairingsForGroup(pairings, binding.pairingsListGroup1, 1)
             loadPairingsForGroup(pairings, binding.pairingsListGroup2, 2)
@@ -243,6 +263,15 @@ class PlayFragment : Fragment() {
 
             setGroupsVisibility()
             setTabsVisibility()
+        }
+        else if (isGroupCompetitionKnockout()) {
+            val pairingsList: ListView = binding.pairingsList
+            val arrayAdapter: ArrayAdapter<PairingDAO> =
+                ArrayAdapter(requireContext(), R.layout.list_view_center_text, pairings)
+            pairingsList.adapter = arrayAdapter
+            pairingsList.setOnItemClickListener { _, _, position, _ ->
+                showEditPairingPopup(pairings[position])
+            }
         }
 
         currentPairings.clear()
@@ -316,13 +345,17 @@ class PlayFragment : Fragment() {
 
     private fun setCompetitionTypeView() {
 
-        if (CompetitionType.DFB_POKAL == currentCompetition!!.competitionType) {
-            binding.layoutDfb.isVisible = true
+        if (isDfbCompetition()) {
+            binding.layoutKnockout.isVisible = true
             binding.layoutGroup.isVisible = false
         }
-        else {
-            binding.layoutDfb.isVisible = false
+        else if (isGroupCompetitionGroupRound()) {
+            binding.layoutKnockout.isVisible = false
             binding.layoutGroup.isVisible = true
+        }
+        else if (isGroupCompetitionKnockout()) {
+            binding.layoutKnockout.isVisible = true
+            binding.layoutGroup.isVisible = false
         }
     }
 
