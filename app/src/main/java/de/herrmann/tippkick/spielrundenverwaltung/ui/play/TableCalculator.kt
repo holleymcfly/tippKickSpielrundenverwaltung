@@ -49,8 +49,7 @@ class TableCalculator(private var context: Context, private var allPairings: Lis
             }
         }
 
-        val sorted = tableEntries.sorted()
-        return sorted
+        return tableEntries.sorted()
     }
 
     private fun getTableEntryForEachTeam(): List<TableEntry> {

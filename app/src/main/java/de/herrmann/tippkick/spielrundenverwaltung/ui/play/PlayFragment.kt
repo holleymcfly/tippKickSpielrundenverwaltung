@@ -78,6 +78,12 @@ class PlayFragment : Fragment() {
                     )
                     loadPairingsForCurrentRound()
                 }
+                else if (isGroupCompetition()) {
+                    currentPairingsRound += 1
+                    DrawUtil.drawNextRoundGroupCompetition(currentCompetition!!,
+                        currentPairings, requireContext(), currentPairingsRound,
+                        getString(R.string.drawing_next_round_finished))
+                }
             }
             else {
                 currentPairingsRound += 1
@@ -143,6 +149,15 @@ class PlayFragment : Fragment() {
         }
 
         return CompetitionType.DFB_POKAL == currentCompetition!!.competitionType
+    }
+
+    private fun isGroupCompetition(): Boolean {
+
+        if (currentCompetition == null) {
+            return false;
+        }
+
+        return CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType
     }
 
     override fun onDestroyView() {

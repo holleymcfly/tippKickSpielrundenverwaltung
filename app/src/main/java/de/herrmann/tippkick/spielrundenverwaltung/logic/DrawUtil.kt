@@ -6,6 +6,8 @@ import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionType
 import de.herrmann.tippkick.spielrundenverwaltung.model.PairingDAO
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.CompetitionsDBAccess
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.PairingDBAccess
+import de.herrmann.tippkick.spielrundenverwaltung.ui.play.TableCalculator
+import de.herrmann.tippkick.spielrundenverwaltung.ui.play.TableEntry
 import de.herrmann.tippkick.spielrundenverwaltung.util.Util
 
 class DrawUtil {
@@ -156,6 +158,222 @@ class DrawUtil {
             }
 
             Util.showOkButtonMessage(context, finishText)
+        }
+
+        /**
+         * The number of teams for the second round differs by the number of groups and the number
+         * of teams per group.
+         * Depending on that values, the following number of teams will come into the next round:
+         *
+         * Number Of Groups     Number of Teams Per Group           Number of Teams in Next Round
+         *          3                       4                                   8
+         *          3                       6                                   8
+         *          4                       4                                   8
+         *          4                       6                                   16
+         *          5                       4                                   16
+         *          5                       6                                   16
+         *          6                       4                                   16
+         *          6                       6                                   16
+         */
+        fun drawNextRoundGroupCompetition(competition: CompetitionDAO, pairings: MutableList<PairingDAO>,
+                                          context: Context, newRound: Int, finishText: String) {
+
+            if (newRound == 2) {
+                drawSecondRoundGroupCompetition(
+                    competition,
+                    pairings,
+                    context,
+                    newRound,
+                    finishText
+                )
+            }
+        }
+
+        private fun drawSecondRoundGroupCompetition(competition: CompetitionDAO,
+                                                    pairings: MutableList<PairingDAO>,
+                                                    context: Context, newRound: Int,
+                                                    finishText: String) {
+
+            val survivors = getSurvivors(pairings, context, competition)
+            val teamIds = mutableListOf<Int>()
+            survivors.forEach { survivor ->
+                teamIds.add(survivor.getTeamId())
+            }
+
+            val drawHelper = DrawHelper(teamIds)
+            val newPairingsFirstLeg: List<PairingDAO> = drawHelper.draw()
+            newPairingsFirstLeg.forEach { pairing ->
+                pairing.competitionId = competition.id
+                pairing.round = newRound
+            }
+
+            val allPairings = mutableListOf<PairingDAO>()
+            allPairings.addAll(newPairingsFirstLeg)
+
+            newPairingsFirstLeg.forEach { pairing ->
+                allPairings.add(pairing.reversePairing())
+            }
+
+            val pairingDBAccess = PairingDBAccess()
+            allPairings.forEach { pairing ->
+                pairingDBAccess.insertPairing(context, pairing)
+            }
+
+            Util.showOkButtonMessage(context, finishText)
+        }
+
+        private fun getSurvivors(pairings: MutableList<PairingDAO>, context: Context,
+                                 competition: CompetitionDAO): List<TableEntry> {
+
+            val pairingsGroup1 = getPairingsForGroup(pairings, 1)
+            val pairingsGroup2 = getPairingsForGroup(pairings, 2)
+            val pairingsGroup3 = getPairingsForGroup(pairings, 3)
+            val pairingsGroup4 = getPairingsForGroup(pairings, 4)
+            val pairingsGroup5 = getPairingsForGroup(pairings, 5)
+            val pairingsGroup6 = getPairingsForGroup(pairings, 6)
+
+            val tableCalculator1 = TableCalculator(context, pairingsGroup1, 1)
+            val tableEntriesGroup1: List<TableEntry> = tableCalculator1.calculate()
+            val tableCalculator2 = TableCalculator(context, pairingsGroup2, 2)
+            val tableEntriesGroup2: List<TableEntry> = tableCalculator2.calculate()
+            val tableCalculator3 = TableCalculator(context, pairingsGroup3, 3)
+            val tableEntriesGroup3: List<TableEntry> = tableCalculator3.calculate()
+            val tableCalculator4 = TableCalculator(context, pairingsGroup4, 4)
+            val tableEntriesGroup4: List<TableEntry> = tableCalculator4.calculate()
+            val tableCalculator5 = TableCalculator(context, pairingsGroup5, 5)
+            val tableEntriesGroup5: List<TableEntry> = tableCalculator5.calculate()
+            val tableCalculator6 = TableCalculator(context, pairingsGroup6, 6)
+            val tableEntriesGroup6: List<TableEntry> = tableCalculator6.calculate()
+
+            val survivors = mutableListOf<TableEntry>()
+            if (competition.numberOfGroups == 3) {
+                if (competition.numberOfTeamsPerGroup == 4 ||
+                    competition.numberOfTeamsPerGroup == 6) {
+
+                    // In both cases with three groups, the best 8 teams survive.
+                    survivors.add(tableEntriesGroup1[0])
+                    survivors.add(tableEntriesGroup1[1])
+                    survivors.add(tableEntriesGroup2[0])
+                    survivors.add(tableEntriesGroup2[1])
+                    survivors.add(tableEntriesGroup3[0])
+                    survivors.add(tableEntriesGroup3[1])
+
+                    val thirdsOfGroup = mutableListOf<TableEntry>()
+                    thirdsOfGroup.add(tableEntriesGroup1[2])
+                    thirdsOfGroup.add(tableEntriesGroup2[2])
+                    thirdsOfGroup.add(tableEntriesGroup3[2])
+                    thirdsOfGroup.sorted()
+
+                    survivors.add(thirdsOfGroup[0])
+                    survivors.add(thirdsOfGroup[1])
+                }
+            }
+            else if (competition.numberOfGroups == 4) {
+                if (competition.numberOfTeamsPerGroup == 4) {
+
+                    survivors.add(tableEntriesGroup1[0])
+                    survivors.add(tableEntriesGroup1[1])
+                    survivors.add(tableEntriesGroup2[0])
+                    survivors.add(tableEntriesGroup2[1])
+                    survivors.add(tableEntriesGroup3[0])
+                    survivors.add(tableEntriesGroup3[1])
+                    survivors.add(tableEntriesGroup4[0])
+                    survivors.add(tableEntriesGroup4[1])
+                }
+                else if (competition.numberOfTeamsPerGroup == 6) {
+
+                    survivors.add(tableEntriesGroup1[0])
+                    survivors.add(tableEntriesGroup1[1])
+                    survivors.add(tableEntriesGroup1[2])
+                    survivors.add(tableEntriesGroup1[3])
+                    survivors.add(tableEntriesGroup2[0])
+                    survivors.add(tableEntriesGroup2[1])
+                    survivors.add(tableEntriesGroup2[2])
+                    survivors.add(tableEntriesGroup2[3])
+                    survivors.add(tableEntriesGroup3[0])
+                    survivors.add(tableEntriesGroup3[1])
+                    survivors.add(tableEntriesGroup3[2])
+                    survivors.add(tableEntriesGroup3[3])
+                    survivors.add(tableEntriesGroup4[0])
+                    survivors.add(tableEntriesGroup4[1])
+                    survivors.add(tableEntriesGroup4[2])
+                    survivors.add(tableEntriesGroup4[3])
+                }
+            }
+            else if (competition.numberOfGroups == 5) {
+                if (competition.numberOfTeamsPerGroup == 4 ||
+                    competition.numberOfTeamsPerGroup == 6) {
+
+                    survivors.add(tableEntriesGroup1[0])
+                    survivors.add(tableEntriesGroup1[1])
+                    survivors.add(tableEntriesGroup1[2])
+                    survivors.add(tableEntriesGroup2[0])
+                    survivors.add(tableEntriesGroup2[1])
+                    survivors.add(tableEntriesGroup2[2])
+                    survivors.add(tableEntriesGroup3[0])
+                    survivors.add(tableEntriesGroup3[1])
+                    survivors.add(tableEntriesGroup3[2])
+                    survivors.add(tableEntriesGroup4[0])
+                    survivors.add(tableEntriesGroup4[1])
+                    survivors.add(tableEntriesGroup4[2])
+                    survivors.add(tableEntriesGroup5[0])
+                    survivors.add(tableEntriesGroup5[1])
+                    survivors.add(tableEntriesGroup5[2])
+
+                    val forthsOfGroup = mutableListOf<TableEntry>()
+                    forthsOfGroup.add(tableEntriesGroup1[3])
+                    forthsOfGroup.add(tableEntriesGroup2[3])
+                    forthsOfGroup.add(tableEntriesGroup3[3])
+                    forthsOfGroup.add(tableEntriesGroup4[3])
+                    forthsOfGroup.add(tableEntriesGroup5[3])
+
+                    forthsOfGroup.sorted()
+                    survivors.add(forthsOfGroup[0])
+                }
+            }
+            else if (competition.numberOfGroups == 6) {
+                if (competition.numberOfTeamsPerGroup == 4 ||
+                    competition.numberOfTeamsPerGroup == 6) {
+
+                    survivors.add(tableEntriesGroup1[0])
+                    survivors.add(tableEntriesGroup1[1])
+                    survivors.add(tableEntriesGroup1[2])
+                    survivors.add(tableEntriesGroup1[3])
+                    survivors.add(tableEntriesGroup2[0])
+                    survivors.add(tableEntriesGroup2[1])
+                    survivors.add(tableEntriesGroup2[2])
+                    survivors.add(tableEntriesGroup2[3])
+                    survivors.add(tableEntriesGroup3[0])
+                    survivors.add(tableEntriesGroup3[1])
+                    survivors.add(tableEntriesGroup3[2])
+                    survivors.add(tableEntriesGroup3[3])
+                    survivors.add(tableEntriesGroup4[0])
+                    survivors.add(tableEntriesGroup4[1])
+                    survivors.add(tableEntriesGroup4[2])
+                    survivors.add(tableEntriesGroup4[3])
+                    survivors.add(tableEntriesGroup5[0])
+                    survivors.add(tableEntriesGroup5[1])
+                    survivors.add(tableEntriesGroup5[2])
+                    survivors.add(tableEntriesGroup5[3])
+                    survivors.add(tableEntriesGroup6[0])
+                    survivors.add(tableEntriesGroup6[1])
+                    survivors.add(tableEntriesGroup6[2])
+                    survivors.add(tableEntriesGroup6[3])
+                }
+            }
+
+            return survivors
+        }
+
+        private fun getPairingsForGroup(pairings: MutableList<PairingDAO>, group: Int): MutableList<PairingDAO> {
+
+            val pairingsInGroup = mutableListOf<PairingDAO>()
+            pairings.forEach { pairing ->
+                if (pairing.group == group) {
+                    pairingsInGroup.add(pairing)
+                }
+            }
+            return pairingsInGroup
         }
 
         private fun getWinners(pairings: MutableList<PairingDAO>): MutableList<Int> {
