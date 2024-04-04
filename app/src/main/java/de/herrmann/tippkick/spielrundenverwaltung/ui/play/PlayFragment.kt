@@ -266,12 +266,13 @@ class PlayFragment : Fragment() {
             setTabsVisibility()
         }
         else if (isGroupCompetitionKnockout()) {
+            val sortedPairings: List<PairingDAO> = sortPairingsForKnockout(pairings)
             val pairingsList: ListView = binding.pairingsList
             val arrayAdapter: ArrayAdapter<PairingDAO> =
-                ArrayAdapter(requireContext(), R.layout.list_view_center_text, pairings)
+                ArrayAdapter(requireContext(), R.layout.list_view_center_text, sortedPairings)
             pairingsList.adapter = arrayAdapter
             pairingsList.setOnItemClickListener { _, _, position, _ ->
-                showEditPairingPopup(pairings[position])
+                showEditPairingPopup(sortedPairings[position])
             }
         }
 
@@ -284,6 +285,55 @@ class PlayFragment : Fragment() {
         if (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType) {
             calculateAndFillTables()
         }
+    }
+
+    private fun sortPairingsForKnockout(pairings: List<PairingDAO>) : List<PairingDAO> {
+
+        val pairingsSorted = mutableListOf<PairingDAO>()
+        pairings.forEach { pairing ->
+            if (!containsPairing(pairingsSorted, pairing)) {
+                pairingsSorted.add(pairing)
+            }
+
+            if (!containsPairingReverse(pairingsSorted, pairing)) {
+                pairingsSorted.add(getReverseMatch(pairings, pairing))
+            }
+        }
+
+        return pairingsSorted
+    }
+
+    private fun getReverseMatch(pairings: List<PairingDAO>, pairing: PairingDAO) : PairingDAO {
+
+        pairings.forEach { p ->
+            if (p.teamIdHome == pairing.teamIdAway && p.teamIdAway == pairing.teamIdHome) {
+                return p
+            }
+        }
+
+        throw RuntimeException("Reverse match not part of the list")
+    }
+
+    private fun containsPairing(pairings: List<PairingDAO>, pairing: PairingDAO) : Boolean {
+
+        for (p in pairings) {
+            if (p.teamIdHome == pairing.teamIdHome && p.teamIdAway == pairing.teamIdAway) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private fun containsPairingReverse(pairings: List<PairingDAO>, pairing: PairingDAO) : Boolean {
+
+        for (p in pairings) {
+            if (p.teamIdAway == pairing.teamIdHome && p.teamIdHome == pairing.teamIdAway) {
+                return true
+            }
+        }
+
+        return false
     }
 
     private fun setTabsVisibility() {
