@@ -83,6 +83,7 @@ class PlayFragment : Fragment() {
                     DrawUtil.drawNextRoundGroupCompetition(currentCompetition!!,
                         currentPairings, requireContext(), currentPairingsRound,
                         getString(R.string.drawing_next_round_finished))
+                    loadPairingsForCurrentRound()
                 }
             }
             else {
@@ -163,7 +164,7 @@ class PlayFragment : Fragment() {
     private fun isGroupCompetitionGroupRound(): Boolean {
 
         if (currentCompetition == null) {
-            return false;
+            return false
         }
 
         return (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType)
@@ -173,7 +174,7 @@ class PlayFragment : Fragment() {
     private fun isGroupCompetitionKnockout(): Boolean {
 
         if (currentCompetition == null) {
-            return false;
+            return false
         }
 
         return (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType)
