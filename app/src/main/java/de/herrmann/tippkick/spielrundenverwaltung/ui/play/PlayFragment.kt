@@ -26,6 +26,7 @@ import de.herrmann.tippkick.spielrundenverwaltung.persistence.CompetitionsDBAcce
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.PairingDBAccess
 import de.herrmann.tippkick.spielrundenverwaltung.util.Util
 
+
 class PlayFragment : Fragment() {
 
     private var _binding: FragmentPlayBinding? = null
@@ -268,8 +269,26 @@ class PlayFragment : Fragment() {
         else if (isGroupCompetitionKnockout()) {
             val sortedPairings: List<PairingDAO> = sortPairingsForKnockout(pairings)
             val pairingsList: ListView = binding.pairingsList
-            val arrayAdapter: ArrayAdapter<PairingDAO> =
-                ArrayAdapter(requireContext(), R.layout.list_view_center_text, sortedPairings)
+
+            pairingsList.dividerHeight = 0
+
+            val arrayAdapter: ArrayAdapter<PairingDAO?> = object : ArrayAdapter<PairingDAO?>(
+                requireContext(),
+                R.layout.list_view_center_text,
+                sortedPairings
+            ) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = super.getView(position, convertView, parent)
+                    if (position % 2 == 1) {
+                        view.setPadding(0, 0, 0, 60)
+                    }
+                    else {
+                        view.setPadding(0, 0, 0, 0)
+                    }
+                    return view
+                }
+            }
+
             pairingsList.adapter = arrayAdapter
             pairingsList.setOnItemClickListener { _, _, position, _ ->
                 showEditPairingPopup(sortedPairings[position])
