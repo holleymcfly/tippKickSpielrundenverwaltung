@@ -128,7 +128,7 @@ class PdfCreator {
         roundHeaderPaint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD_ITALIC))
         roundHeaderPaint.textSize = 15F
 
-        drawText(Util.getRoundTitle(context, pairingsInRound), horizontalStart+10F,
+        drawText(Util.getRoundTitle(context, competition, pairingsInRound), horizontalStart+10F,
             roundHeaderPaint)
         verticalPosition += 15F
 

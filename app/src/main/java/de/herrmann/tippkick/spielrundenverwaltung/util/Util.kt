@@ -65,15 +65,29 @@ class Util {
             return formatter.format(date)
         }
 
-        fun getRoundTitle(context: Context, pairings: List<PairingDAO>): String {
+        fun getRoundTitle(context: Context, competition: CompetitionDAO,
+                          pairings: List<PairingDAO>): String {
 
-            return when (pairings.size) {
-                1 -> context.getString(R.string.final_)
-                2 -> context.getString(R.string.semi_final)
-                4 -> context.getString(R.string.quarter_final)
-                8 -> context.getString(R.string.round_of_16)
-                else -> {
-                    return context.getText(R.string.round).toString() + " " + pairings[0].round
+            if (isGroupCompetitionKnockout(competition, pairings[0].round)) {
+                return when (pairings.size) {
+                    1 -> context.getString(R.string.final_)
+                    4 -> context.getString(R.string.semi_final)
+                    8 -> context.getString(R.string.quarter_final)
+                    16 -> context.getString(R.string.round_of_16)
+                    else -> {
+                        return context.getText(R.string.round).toString() + " " + pairings[0].round
+                    }
+                }
+            }
+            else {
+                return when (pairings.size) {
+                    1 -> context.getString(R.string.final_)
+                    2 -> context.getString(R.string.semi_final)
+                    4 -> context.getString(R.string.quarter_final)
+                    8 -> context.getString(R.string.round_of_16)
+                    else -> {
+                        return context.getText(R.string.round).toString() + " " + pairings[0].round
+                    }
                 }
             }
         }

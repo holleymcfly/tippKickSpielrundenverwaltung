@@ -414,7 +414,7 @@ class PlayFragment : Fragment() {
     private fun setCompetitionRoundName() {
 
         val roundText: TextView = binding.roundText
-        roundText.text = Util.getRoundTitle(requireContext(), currentPairings)
+        roundText.text = Util.getRoundTitle(requireContext(), currentCompetition!!, currentPairings)
     }
 
     private fun setNextPreviousButtonsEnabledDisabled() {
