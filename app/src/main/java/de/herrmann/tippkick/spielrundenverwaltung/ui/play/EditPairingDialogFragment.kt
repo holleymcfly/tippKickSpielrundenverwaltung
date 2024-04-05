@@ -12,6 +12,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import de.herrmann.tippkick.spielrundenverwaltung.R
 import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionDAO
@@ -79,9 +80,19 @@ class EditPairingDialogFragment(private val competition: CompetitionDAO,
             val pairing = view.findViewById<TextView>(R.id.pairing)
             pairing.text = currentPairing.toStringShort()
 
+            setVisibilityOfExtraTimeAndPenalty(view)
             setViewEnabledDisabled(view)
             return dialog
+
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    private fun setVisibilityOfExtraTimeAndPenalty(view: View) {
+
+        if (Util.isGroupCompetitionGroupRound(competition, currentPairing.round)) {
+            view.findViewById<CheckBox>(R.id.extra_time).isVisible = false
+            view.findViewById<CheckBox>(R.id.penalty).isVisible = false
+        }
     }
 
     private fun setViewEnabledDisabled(view: View) {

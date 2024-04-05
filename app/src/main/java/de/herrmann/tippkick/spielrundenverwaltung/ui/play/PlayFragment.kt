@@ -71,7 +71,7 @@ class PlayFragment : Fragment() {
         binding.nextRound.setOnClickListener {
 
             if (isDrawNextRoundEnabled()) {
-                if (isDfbCompetition()) {
+                if (Util.isDfbCompetition(currentCompetition)) {
                     currentPairingsRound += 1
                     DrawUtil.drawNextRoundDfb(
                         currentCompetition!!.id, currentPairings, requireContext(),
@@ -79,7 +79,7 @@ class PlayFragment : Fragment() {
                     )
                     loadPairingsForCurrentRound()
                 }
-                else if (isGroupCompetition()) {
+                else if (Util.isGroupCompetition(currentCompetition)) {
                     currentPairingsRound += 1
                     DrawUtil.drawNextRoundGroupCompetition(currentCompetition!!,
                         currentPairings, requireContext(), currentPairingsRound,
@@ -142,44 +142,6 @@ class PlayFragment : Fragment() {
         }
 
         return root
-    }
-
-    private fun isDfbCompetition(): Boolean {
-
-        if (currentCompetition == null) {
-            return false
-        }
-
-        return CompetitionType.DFB_POKAL == currentCompetition!!.competitionType
-    }
-
-    private fun isGroupCompetition(): Boolean {
-
-        if (currentCompetition == null) {
-            return false
-        }
-
-        return CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType
-    }
-
-    private fun isGroupCompetitionGroupRound(): Boolean {
-
-        if (currentCompetition == null) {
-            return false
-        }
-
-        return (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType)
-                && currentPairingsRound == 1
-    }
-
-    private fun isGroupCompetitionKnockout(): Boolean {
-
-        if (currentCompetition == null) {
-            return false
-        }
-
-        return (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType)
-                && currentPairingsRound > 1
     }
 
     override fun onDestroyView() {
@@ -245,7 +207,7 @@ class PlayFragment : Fragment() {
             pairing.setContext(requireContext())
         }
 
-        if (isDfbCompetition()) {
+        if (Util.isDfbCompetition(currentCompetition)) {
             val pairingsList: ListView = binding.pairingsList
             val arrayAdapter: ArrayAdapter<PairingDAO> =
                 ArrayAdapter(requireContext(), R.layout.list_view_center_text, pairings)
@@ -254,7 +216,7 @@ class PlayFragment : Fragment() {
                 showEditPairingPopup(pairings[position])
             }
         }
-        else if (isGroupCompetitionGroupRound()) {
+        else if (Util.isGroupCompetitionGroupRound(currentCompetition, currentPairingsRound)) {
 
             loadPairingsForGroup(pairings, binding.pairingsListGroup1, 1)
             loadPairingsForGroup(pairings, binding.pairingsListGroup2, 2)
@@ -266,7 +228,7 @@ class PlayFragment : Fragment() {
             setGroupsVisibility()
             setTabsVisibility()
         }
-        else if (isGroupCompetitionKnockout()) {
+        else if (Util.isGroupCompetitionKnockout(currentCompetition, currentPairingsRound)) {
             val sortedPairings: List<PairingDAO> = sortPairingsForKnockout(pairings)
             val pairingsList: ListView = binding.pairingsList
 
@@ -415,15 +377,15 @@ class PlayFragment : Fragment() {
 
     private fun setCompetitionTypeView() {
 
-        if (isDfbCompetition()) {
+        if (Util.isDfbCompetition(currentCompetition)) {
             binding.layoutKnockout.isVisible = true
             binding.layoutGroup.isVisible = false
         }
-        else if (isGroupCompetitionGroupRound()) {
+        else if (Util.isGroupCompetitionGroupRound(currentCompetition, currentPairingsRound)) {
             binding.layoutKnockout.isVisible = false
             binding.layoutGroup.isVisible = true
         }
-        else if (isGroupCompetitionKnockout()) {
+        else if (Util.isGroupCompetitionKnockout(currentCompetition, currentPairingsRound)) {
             binding.layoutKnockout.isVisible = true
             binding.layoutGroup.isVisible = false
         }

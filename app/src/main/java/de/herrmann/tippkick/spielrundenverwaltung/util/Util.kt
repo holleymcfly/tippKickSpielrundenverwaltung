@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import de.herrmann.tippkick.spielrundenverwaltung.R
 import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionDAO
+import de.herrmann.tippkick.spielrundenverwaltung.model.CompetitionType
 import de.herrmann.tippkick.spielrundenverwaltung.model.PairingDAO
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.CompetitionsDBAccess
 import de.herrmann.tippkick.spielrundenverwaltung.persistence.PairingDBAccess
@@ -75,6 +76,44 @@ class Util {
                     return context.getText(R.string.round).toString() + " " + pairings[0].round
                 }
             }
+        }
+
+        fun isDfbCompetition(competition : CompetitionDAO?): Boolean {
+
+            if (competition == null) {
+                return false
+            }
+
+            return CompetitionType.DFB_POKAL == competition.competitionType
+        }
+
+        fun isGroupCompetition(competition: CompetitionDAO?): Boolean {
+
+            if (competition == null) {
+                return false
+            }
+
+            return CompetitionType.GROUP_STAGE == competition.competitionType
+        }
+
+        fun isGroupCompetitionGroupRound(competition: CompetitionDAO?, pairingsRound: Int): Boolean {
+
+            if (competition == null) {
+                return false
+            }
+
+            return (CompetitionType.GROUP_STAGE == competition.competitionType)
+                    && pairingsRound == 1
+        }
+
+        fun isGroupCompetitionKnockout(competition: CompetitionDAO?, pairingsRound: Int): Boolean {
+
+            if (competition == null) {
+                return false
+            }
+
+            return (CompetitionType.GROUP_STAGE == competition.competitionType)
+                    && pairingsRound > 1
         }
 
         fun getAllTeamsList(): MutableList<String> {
