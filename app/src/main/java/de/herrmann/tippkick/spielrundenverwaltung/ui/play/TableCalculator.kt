@@ -11,7 +11,7 @@ class TableCalculator(private var context: Context, private var allPairings: Lis
 
         // Only regard pairings for the requested group.
         allPairings.forEach { pairing ->
-            if (pairing.group == group) {
+            if (pairing.group == group || group == -1) {
                 pairings.add(pairing)
             }
         }

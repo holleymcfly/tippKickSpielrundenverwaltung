@@ -187,6 +187,80 @@ class DrawUtil {
                     finishText
                 )
             }
+            else {
+                drawKnockoutRoundOfGroupCompetition(competition, pairings, context, newRound,
+                    finishText)
+            }
+        }
+
+        private fun drawKnockoutRoundOfGroupCompetition(competition: CompetitionDAO,
+                                                        pairings: MutableList<PairingDAO>,
+                                                        context: Context,
+                                                        newRound: Int,
+                                                        finishText: String) {
+
+            val winners = getKnockoutWinners(pairings, context)
+
+            val drawHelper = DrawHelper(winners)
+            val newPairingsFirstLeg: List<PairingDAO> = drawHelper.draw()
+            newPairingsFirstLeg.forEach { pairing ->
+                pairing.competitionId = competition.id
+                pairing.round = newRound
+            }
+
+            val allPairings = mutableListOf<PairingDAO>()
+            allPairings.addAll(newPairingsFirstLeg)
+
+            if (allPairings.size > 1) {
+                // the final doesn't have a second leg
+                newPairingsFirstLeg.forEach { pairing ->
+                    allPairings.add(pairing.reversePairing())
+                }
+            }
+
+            val pairingDBAccess = PairingDBAccess()
+            allPairings.forEach { pairing ->
+                pairingDBAccess.insertPairing(context, pairing)
+            }
+
+            Util.showOkButtonMessage(context, finishText)
+        }
+
+        private fun getKnockoutWinners(pairings: MutableList<PairingDAO>, context: Context):
+                MutableList<Int> {
+
+            val winners = mutableListOf<Int>()
+
+            pairings.forEach { pairing ->
+                val secondLeg = getSecondLeg(pairing, pairings)
+
+                val twoTeams = mutableListOf<PairingDAO>()
+                twoTeams.add(pairing)
+                twoTeams.add(secondLeg)
+
+                TableEntry(context, pairing.teamIdHome)
+                TableEntry(context, pairing.teamIdAway)
+
+                val tableCalculator = TableCalculator(context, twoTeams, -1)
+                val table = tableCalculator.calculate()
+
+                if (!winners.contains(table[0].getTeamId())) {
+                    winners.add(table[0].getTeamId())
+                }
+            }
+
+            return winners
+        }
+
+        private fun getSecondLeg(pairing: PairingDAO, pairings: MutableList<PairingDAO>) : PairingDAO {
+
+            pairings.forEach { p ->
+                if (p.teamIdAway == pairing.teamIdHome && p.teamIdHome == pairing.teamIdAway) {
+                    return p
+                }
+            }
+
+            throw RuntimeException("Could not get second leg for pairing.")
         }
 
         private fun drawSecondRoundGroupCompetition(competition: CompetitionDAO,
