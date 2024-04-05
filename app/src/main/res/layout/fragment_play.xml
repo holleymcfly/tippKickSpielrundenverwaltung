@@ -172,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_weight="5"
-            app:layout_constraintTop_toTopOf="parent"></ListView>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageButton
             android:id="@+id/distance_holder_group_1"
@@ -256,13 +256,15 @@
             android:id="@+id/pairings_list_group_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:layout_weight="5"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageButton
             android:id="@+id/distance_holder_group_2"
             android:layout_marginTop="70dp"
             android:layout_width="40dp"
-            android:layout_height="0dp"/>
+            android:layout_height="10dp"/>
 
         <HorizontalScrollView
             android:id="@+id/table_view_group_2"
@@ -340,7 +342,9 @@
             android:id="@+id/pairings_list_group_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:layout_weight="5"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageButton
             android:id="@+id/distance_holder_group_3"
@@ -424,7 +428,9 @@
             android:id="@+id/pairings_list_group_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:layout_weight="5"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageButton
             android:id="@+id/distance_holder_group_4"
@@ -508,7 +514,9 @@
             android:id="@+id/pairings_list_group_5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:layout_weight="5"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageButton
             android:id="@+id/distance_holder_group_5"
@@ -592,7 +600,9 @@
             android:id="@+id/pairings_list_group_6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:layout_weight="5"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageButton
             android:id="@+id/distance_holder_group_6"
