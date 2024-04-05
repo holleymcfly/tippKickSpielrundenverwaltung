@@ -270,6 +270,10 @@ class PlayFragment : Fragment() {
 
     private fun sortPairingsForKnockout(pairings: List<PairingDAO>) : List<PairingDAO> {
 
+        if (pairings.size < 2) {
+            return pairings
+        }
+
         val pairingsSorted = mutableListOf<PairingDAO>()
         pairings.forEach { pairing ->
             if (!containsPairing(pairingsSorted, pairing)) {
@@ -425,7 +429,8 @@ class PlayFragment : Fragment() {
 
     private fun isDrawNextRoundEnabled(): Boolean {
         val existsNextRound = Util.existsNextRound(currentCompetition!!, currentPairingsRound, requireContext())
-        return roundFinished() && !existsNextRound
+        val isFinal = currentPairings.size == 1
+        return roundFinished() && !existsNextRound && !isFinal
     }
 
     private fun setNextButtonEnabledDisabled() {
