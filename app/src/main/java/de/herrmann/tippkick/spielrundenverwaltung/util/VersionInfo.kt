@@ -11,6 +11,19 @@ class VersionInfo {
         private fun getVersion1_1_Info(): String {
 
             return """
+                <h1>Version 2.0:</h1>
+                <br>
+                <h3>Verbesserungen:</h3>
+                <ul>
+                    <li>Verlängerung und Elfmeterschießen können nicht mehr ohne gültiges Ergebnis gesetzt werden.</li>
+                </ul>
+                <br>
+                <h3>Neue Funktionen:</h3>
+                <ul>
+                    <li>&nbsp;Gruppenwettbewerb</li>
+                </ul>
+                <br>
+                <br>
                 <h1>Version 1.1:</h1>
                 <br>
                 <h3>Fehlerbehebungen:</h3>
@@ -29,7 +42,7 @@ class VersionInfo {
                 </ul>
                 <br>
                 <h3>Neue Funktionen:</h3>
-                </ul>
+                <ul>
                    <li>&nbsp;Wettbewerbe können jetzt (mit allen zugehörigen Spielen) gelöscht werden.</li>
                    <li>&nbsp;Anzeige der Versionsinformation.</li>
                    <li>&nbsp;PDF-Erstellung von Wettbewerben ("Drucken").</li>

@@ -132,6 +132,11 @@ class EditPairingDialogFragment(private val competition: CompetitionDAO,
             return
         }
 
+        if (goalsHome == -1 && (extraTime.isChecked || penalty.isChecked)) {
+            Util.showOkButtonMessage(requireContext(), getString(R.string.no_extra_time_or_penalty_without_result))
+            return
+        }
+
         val pairingDBAccess = PairingDBAccess()
         pairingDBAccess.updatePairing(
             requireContext(), this.currentPairing.id,

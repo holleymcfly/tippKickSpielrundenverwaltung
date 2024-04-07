@@ -64,6 +64,7 @@
     <string name="group_5">Gruppe 5</string>
     <string name="group_6">Gruppe 6</string>
     <string name="matchday">Spieltag</string>
+    <string name="no_extra_time_or_penalty_without_result">Verlängerung und Elfmeterschießen können nur mit einem gültigen Ergebnis gesetzt werden.</string>
     <string name="no_undecided_match">Dieses Spiel findet in einer KO-Runde statt. Es darf kein Unentschieden geben.</string>
     <string name="no_finished_competitions_yet">Es sind noch keine ausgelosten Wettbewerbe vorhanden.</string>
     <string name="penalty">Elfmeterschießen</string>
