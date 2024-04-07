@@ -2,6 +2,7 @@ package de.herrmann.tippkick.spielrundenverwaltung.ui.play
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -213,7 +214,7 @@ class PlayFragment : Fragment() {
                 ArrayAdapter(requireContext(), R.layout.list_view_center_text, pairings)
             pairingsList.adapter = arrayAdapter
             pairingsList.setOnItemClickListener { _, _, position, _ ->
-                showEditPairingPopup(pairings[position])
+                showEditPairingPopup(pairingsList, pairings[position], getListViewState(pairingsList))
             }
         }
         else if (Util.isGroupCompetitionGroupRound(currentCompetition, currentPairingsRound)) {
@@ -253,7 +254,7 @@ class PlayFragment : Fragment() {
 
             pairingsList.adapter = arrayAdapter
             pairingsList.setOnItemClickListener { _, _, position, _ ->
-                showEditPairingPopup(sortedPairings[position])
+                showEditPairingPopup(pairingsList, sortedPairings[position], getListViewState(pairingsList))
             }
         }
 
@@ -266,6 +267,10 @@ class PlayFragment : Fragment() {
         if (CompetitionType.GROUP_STAGE == currentCompetition!!.competitionType) {
             calculateAndFillTables()
         }
+    }
+
+    private fun getListViewState(listView: ListView) : Parcelable? {
+        return listView.onSaveInstanceState();
     }
 
     private fun sortPairingsForKnockout(pairings: List<PairingDAO>) : List<PairingDAO> {
@@ -336,7 +341,7 @@ class PlayFragment : Fragment() {
             ArrayAdapter(requireContext(), R.layout.list_view_center_text, groupPairings)
         groupPairingsList.adapter = arrayAdapter
         groupPairingsList.setOnItemClickListener { _, _, position, _ ->
-            showEditPairingPopup(groupPairings[position])
+            showEditPairingPopup(groupPairingsList, groupPairings[position], getListViewState(groupPairingsList))
         }
     }
 
@@ -395,7 +400,7 @@ class PlayFragment : Fragment() {
         }
     }
 
-    private fun showEditPairingPopup(pairing: PairingDAO) {
+    private fun showEditPairingPopup(listView: ListView, pairing: PairingDAO, state: Parcelable?) {
 
         val existsNextRound = Util.existsNextRound(
             currentCompetition!!, currentPairingsRound,
@@ -408,6 +413,9 @@ class PlayFragment : Fragment() {
         pairingDialog.callback = Runnable {
             run {
                 loadPairingsForCurrentRound()
+                if (state != null) {
+                    listView.onRestoreInstanceState(state);
+                }
             }
         }
 

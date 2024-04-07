@@ -17,6 +17,7 @@ class VersionInfo {
                 <ul>
                     <li>&nbsp;Verlängerung und Elfmeterschießen können nicht mehr ohne gültiges Ergebnis gesetzt werden.</li>
                     <li>&nbsp;Wird der Haken bei Verlängerung entfernt, wird ein ggf. vorhandener Haken bei Elfmeterschießen automatisch entfernt.</li>
+                    <li>&nbsp;Nach der Eingabe eines Ergebnisses bleibt die Liste dort wo sie bei Auswahl der Partie stand.</li>
                 </ul>
                 <br>
                 <h3>Neue Funktionen:</h3>
