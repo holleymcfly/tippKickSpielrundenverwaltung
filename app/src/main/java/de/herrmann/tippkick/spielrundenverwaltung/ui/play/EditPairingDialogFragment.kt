@@ -50,11 +50,17 @@ class EditPairingDialogFragment(private val competition: CompetitionDAO,
             }
 
             val extraTime: CheckBox = view.findViewById(R.id.extra_time)
+            val penalty: CheckBox = view.findViewById(R.id.penalty)
+
             if (currentPairing.extraTime) {
                 extraTime.isChecked = true
             }
+            extraTime.setOnCheckedChangeListener { _, isChecked ->
+                if (!isChecked) {
+                    penalty.isChecked = false
+                }
+            }
 
-            val penalty: CheckBox = view.findViewById(R.id.penalty)
             if (currentPairing.penalty) {
                 penalty.isChecked = true
             }
