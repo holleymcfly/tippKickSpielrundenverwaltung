@@ -11,6 +11,14 @@ class VersionInfo {
         private fun getVersion1_1_Info(): String {
 
             return """
+                <h1>Version 2.1:</h1>
+                <br>
+                <h3>Neue Funktionen:</h3>
+                <ul>
+                    <li>&nbsp;Druckfunktion für Gruppenwettbewerbe</li>
+                </ul>
+                <br>
+                <br>
                 <h1>Version 2.0:</h1>
                 <br>
                 <h3>Verbesserungen:</h3>
