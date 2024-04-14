@@ -39,6 +39,8 @@ class PdfCreator {
     private lateinit var competition: CompetitionDAO
     private lateinit var pairings: List<PairingDAO>
     private lateinit var context: Context
+    private lateinit var paint: Paint
+    private lateinit var paintBold: Paint
 
     fun createCompetitionPdf(
         competition: CompetitionDAO, pairings: List<PairingDAO>,
@@ -48,6 +50,14 @@ class PdfCreator {
         this.competition = competition
         this.pairings = pairings
         this.context = context
+
+        paint = Paint()
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+        paint.textSize = REGULAR_SIZE
+
+        paintBold = Paint()
+        paintBold.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
+        paintBold.textSize = REGULAR_SIZE
 
         document = PdfDocument()
         nextPage(false)
@@ -72,27 +82,67 @@ class PdfCreator {
     private fun writeGroupCompetitionBody() {
 
         writeGroupPhaseOfGroupCompetition()
+        writeKnockoutPhaseOfGroupCompetition()
+    }
+
+    private fun writeKnockoutPhaseOfGroupCompetition() {
+
+        val pairingDBAccess = PairingDBAccess()
+
+        val groupHeaderPaint = Paint()
+        groupHeaderPaint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
+        groupHeaderPaint.textSize = 12F
+
+        for (round in 2..getMaxRound()) {
+
+            val pairingsInRound = pairingDBAccess.getPairingsForCompetition(
+                this.context,
+                this.competition.id, round
+            )
+            pairingsInRound.forEach { pairing -> pairing.setContext(this.context) }
+
+
+            writeKnockoutHeaderOfGroupCompetition(pairingsInRound, groupHeaderPaint)
+            writePairingsOfKnockoutRoundInGroupCompetition(pairingsInRound)
+            verticalPosition += REGULAR_SIZE + 2F
+        }
+    }
+
+    private fun writePairingsOfKnockoutRoundInGroupCompetition(pairingsInRound: MutableList<PairingDAO>) {
+
+        pairingsInRound.forEach { pairing ->
+            drawText(pairing.toStringShort(), horizontalStart + 10F, paint)
+            drawText(pairing.toResultOnly(), 400F, paintBold)
+            verticalPosition += REGULAR_SIZE
+            drawText(Util.toDateTimeString(pairing.playDate), 400F, paint)
+            verticalPosition += REGULAR_SIZE + 2F
+        }
+    }
+
+    private fun writeKnockoutHeaderOfGroupCompetition(
+        pairingsInRound: MutableList<PairingDAO>,
+        groupHeaderPaint: Paint
+    ) {
+
+        drawText(
+            Util.getRoundTitle(context, competition, pairingsInRound),
+            horizontalStart + 10F, groupHeaderPaint
+        )
+        verticalPosition += 15F
     }
 
     private fun writeGroupPhaseOfGroupCompetition() {
 
         val pairingDBAccess = PairingDBAccess()
-        val allPairings = pairingDBAccess.getPairingsForCompetition(this.context, this.competition.id, 1)
-        allPairings.forEach { pairing -> pairing.setContext(this.context) }
+        val `allPairingsIn Round` =
+            pairingDBAccess.getPairingsForCompetition(this.context, this.competition.id, 1)
+        `allPairingsIn Round`.forEach { pairing -> pairing.setContext(this.context) }
 
         verticalPosition += REGULAR_SIZE
 
-        val paint = Paint()
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-        paint.textSize = REGULAR_SIZE
+        for (group in 1..this.competition.numberOfGroups) {
 
-        val paintBold = Paint()
-        paintBold.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
-        paintBold.textSize = REGULAR_SIZE
-
-        for (group in 1.. this.competition.numberOfGroups) {
-
-            val pairingsInGroup = Util.getPairingsForGroup(allPairings, group)
+            val pairingsInGroup = Util.getPairingsForGroup(`allPairingsIn Round`, group)
 
             writeGroupHeaderOfGroupCompetition(group)
             writeGroupPairingsOfGroupCompetition(pairingsInGroup, paint, paintBold)
@@ -101,8 +151,10 @@ class PdfCreator {
         }
     }
 
-    private fun writeTableOfGroupCompetition(pairingsInGroup: MutableList<PairingDAO>,
-                                             group: Int, paint: Paint, paintBold: Paint) {
+    private fun writeTableOfGroupCompetition(
+        pairingsInGroup: MutableList<PairingDAO>,
+        group: Int, paint: Paint, paintBold: Paint
+    ) {
 
         drawText(context.getString(R.string.ranking), horizontalStart + 10F, paintBold)
         drawText(context.getString(R.string.team), horizontalStart + 40F, paintBold)
@@ -118,7 +170,7 @@ class PdfCreator {
         val tableCalculator = TableCalculator(this.context, pairingsInGroup, group)
         val tableEntries: List<TableEntry> = tableCalculator.calculate()
 
-        var i=0
+        var i = 0
         for (entry in tableEntries) {
             i++
             drawText(i.toString(), horizontalStart + 10F, paint)
@@ -127,10 +179,14 @@ class PdfCreator {
             drawText(entry.getWins().toString(), horizontalStart + 230F, paint)
             drawText(entry.getDraws().toString(), horizontalStart + 260F, paint)
             drawText(entry.getLosts().toString(), horizontalStart + 290F, paint)
-            drawText(entry.getGoalsShot().toString() + " : " + entry.getGoalsConceded().toString(),
-                horizontalStart + 320F, paint)
-            drawText((entry.getGoalsShot() - entry.getGoalsConceded()).toString(),
-                horizontalStart + 350F, paint)
+            drawText(
+                entry.getGoalsShot().toString() + " : " + entry.getGoalsConceded().toString(),
+                horizontalStart + 320F, paint
+            )
+            drawText(
+                (entry.getGoalsShot() - entry.getGoalsConceded()).toString(),
+                horizontalStart + 350F, paint
+            )
             drawText(entry.getPoints().toString(), horizontalStart + 380F, paint)
             verticalPosition += REGULAR_SIZE
         }
@@ -203,12 +259,12 @@ class PdfCreator {
 
     private fun writeCompetitionName() {
 
-        val paint = Paint()
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
-        paint.textSize = 20F
+        val paintCompetitionName = Paint()
+        paintCompetitionName.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
+        paintCompetitionName.textSize = 20F
 
         val title = competition.competitionType.toString() + ": " + competition.name
-        drawText(title, horizontalStart, paint)
+        drawText(title, horizontalStart, paintCompetitionName)
         verticalPosition += 20F
     }
 
@@ -222,11 +278,11 @@ class PdfCreator {
             text += " bis " + Util.toDateString(end)
         }
 
-        val paint = Paint()
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-        paint.textSize = 15F
+        val paintDate = Paint()
+        paintDate.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+        paintDate.textSize = 15F
 
-        drawText(text, horizontalStart, paint)
+        drawText(text, horizontalStart, paintDate)
         verticalPosition += 15F
     }
 
@@ -238,20 +294,14 @@ class PdfCreator {
         roundHeaderPaint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD_ITALIC))
         roundHeaderPaint.textSize = 15F
 
-        drawText(Util.getRoundTitle(context, competition, pairingsInRound), horizontalStart+10F,
-            roundHeaderPaint)
+        drawText(
+            Util.getRoundTitle(context, competition, pairingsInRound), horizontalStart + 10F,
+            roundHeaderPaint
+        )
         verticalPosition += 15F
 
-        val paint = Paint()
-        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
-        paint.textSize = REGULAR_SIZE
-
-        val paintBold = Paint()
-        paintBold.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
-        paintBold.textSize = REGULAR_SIZE
-
         pairingsInRound.forEach { pairing ->
-            drawText(pairing.toStringShort(), horizontalStart+10F, paint)
+            drawText(pairing.toStringShort(), horizontalStart + 10F, paint)
             drawText(pairing.toResultOnly(), 400F, paintBold)
             verticalPosition += REGULAR_SIZE
             drawText(Util.toDateTimeString(pairing.playDate), 400F, paint)
