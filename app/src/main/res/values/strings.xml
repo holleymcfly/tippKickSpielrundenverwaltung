@@ -69,15 +69,24 @@
     <string name="no_finished_competitions_yet">Es sind noch keine ausgelosten Wettbewerbe vorhanden.</string>
     <string name="penalty">Elfmeterschießen</string>
     <string name="quarter_final">Viertelfinale</string>
+    <string name="ranking">Platz</string>
     <string name="round">Runde</string>
     <string name="round_of_16">Achtelfinale</string>
     <string name="semi_final">Halbfinale</string>
     <string name="table">Tabelle</string>
+    <string name="team">Mannschaft</string>
 
     <!-- texts for menu functions -->
-    <string name="group">Gruppe </string>
+    <string name="difference_abbr">Diff.</string>
+    <string name="goals">Tore</string>
+    <string name="group">Gruppe</string>
+    <string name="lost_abbr">N</string>
+    <string name="matches_abbr">Sp.</string>
     <string name="pdf_cannot_be_opened">Die PDF-Datei kann nicht geöffnet werden. Eventuell hast Du keine App dafür installiert (z.B. Adobe Acrobat Reader für PDF)?</string>
+    <string name="points">Punkte</string>
     <string name="select_print_item">Was möchtest Du drucken?</string>
     <string name="select_competition">Wähle den Wettbewerb</string>
+    <string name="undecided_abbr">U</string>
+    <string name="wins_abbr">S</string>
 
 </resources>
