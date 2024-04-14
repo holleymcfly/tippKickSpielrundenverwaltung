@@ -75,6 +75,7 @@
     <string name="table">Tabelle</string>
 
     <!-- texts for menu functions -->
+    <string name="group">Gruppe </string>
     <string name="pdf_cannot_be_opened">Die PDF-Datei kann nicht geöffnet werden. Eventuell hast Du keine App dafür installiert (z.B. Adobe Acrobat Reader für PDF)?</string>
     <string name="select_print_item">Was möchtest Du drucken?</string>
     <string name="select_competition">Wähle den Wettbewerb</string>

@@ -172,6 +172,17 @@ class Util {
                     && pairingsRound > 1
         }
 
+        fun getPairingsForGroup(pairings: MutableList<PairingDAO>, group: Int): MutableList<PairingDAO> {
+
+            val pairingsInGroup = mutableListOf<PairingDAO>()
+            pairings.forEach { pairing ->
+                if (pairing.group == group) {
+                    pairingsInGroup.add(pairing)
+                }
+            }
+            return pairingsInGroup
+        }
+
         fun getAllTeamsList(): MutableList<String> {
 
             val allTeams = mutableListOf<String>()

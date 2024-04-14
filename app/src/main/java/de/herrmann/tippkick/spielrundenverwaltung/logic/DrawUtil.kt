@@ -299,12 +299,12 @@ class DrawUtil {
         private fun getSurvivors(pairings: MutableList<PairingDAO>, context: Context,
                                  competition: CompetitionDAO): List<TableEntry> {
 
-            val pairingsGroup1 = getPairingsForGroup(pairings, 1)
-            val pairingsGroup2 = getPairingsForGroup(pairings, 2)
-            val pairingsGroup3 = getPairingsForGroup(pairings, 3)
-            val pairingsGroup4 = getPairingsForGroup(pairings, 4)
-            val pairingsGroup5 = getPairingsForGroup(pairings, 5)
-            val pairingsGroup6 = getPairingsForGroup(pairings, 6)
+            val pairingsGroup1 = Util.getPairingsForGroup(pairings, 1)
+            val pairingsGroup2 = Util.getPairingsForGroup(pairings, 2)
+            val pairingsGroup3 = Util.getPairingsForGroup(pairings, 3)
+            val pairingsGroup4 = Util.getPairingsForGroup(pairings, 4)
+            val pairingsGroup5 = Util.getPairingsForGroup(pairings, 5)
+            val pairingsGroup6 = Util.getPairingsForGroup(pairings, 6)
 
             val tableCalculator1 = TableCalculator(context, pairingsGroup1, 1)
             val tableEntriesGroup1: List<TableEntry> = tableCalculator1.calculate()
@@ -437,17 +437,6 @@ class DrawUtil {
             }
 
             return survivors
-        }
-
-        private fun getPairingsForGroup(pairings: MutableList<PairingDAO>, group: Int): MutableList<PairingDAO> {
-
-            val pairingsInGroup = mutableListOf<PairingDAO>()
-            pairings.forEach { pairing ->
-                if (pairing.group == group) {
-                    pairingsInGroup.add(pairing)
-                }
-            }
-            return pairingsInGroup
         }
 
         private fun getWinners(pairings: MutableList<PairingDAO>): MutableList<Int> {

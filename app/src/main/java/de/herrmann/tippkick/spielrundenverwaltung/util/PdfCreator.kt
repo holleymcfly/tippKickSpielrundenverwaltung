@@ -53,12 +53,11 @@ class PdfCreator {
         writeCompetitionName()
         writeCompetitionDate()
 
-        val pairingsDBAccess = PairingDBAccess()
-        for (round in 1..getMaxRound()) {
-            val pairingsInRound = pairingsDBAccess.getPairingsForCompetition(context,
-                competition.id, round)
-            pairingsInRound.forEach { pairing -> pairing.setContext(context) }
-            writePairingRound(pairingsInRound)
+        if (Util.isDfbCompetition(this.competition)) {
+            writeDfbCompetitionBody()
+        }
+        else if (Util.isGroupCompetition(this.competition)) {
+            writeGroupCompetitionBody()
         }
 
         document.finishPage(page)
@@ -66,6 +65,64 @@ class PdfCreator {
         openDocument(document)
 
         document.close()
+    }
+
+    private fun writeGroupCompetitionBody() {
+
+        writeGroupPhaseOfGroupCompetition()
+    }
+
+    private fun writeGroupPhaseOfGroupCompetition() {
+
+        val pairingDBAccess = PairingDBAccess()
+        val allPairings = pairingDBAccess.getPairingsForCompetition(this.context, this.competition.id, 1)
+        allPairings.forEach { pairing -> pairing.setContext(this.context) }
+
+        verticalPosition += REGULAR_SIZE
+
+        val groupHeaderPaint = Paint()
+        groupHeaderPaint.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
+        groupHeaderPaint.textSize = 12F
+
+        val paint = Paint()
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
+        paint.textSize = REGULAR_SIZE
+
+        val paintBold = Paint()
+        paintBold.setTypeface(Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD))
+        paintBold.textSize = REGULAR_SIZE
+
+        for (group in 1.. this.competition.numberOfGroups) {
+
+            val pairingsInGroup = Util.getPairingsForGroup(allPairings, group)
+
+            drawText(context.getString(R.string.group) + group, horizontalStart+10F,
+                groupHeaderPaint)
+            verticalPosition += 15F
+
+            pairingsInGroup.forEach { pairing ->
+                drawText(pairing.toStringShort(), horizontalStart+10F, paint)
+                drawText(pairing.toResultOnly(), 400F, paintBold)
+                verticalPosition += REGULAR_SIZE
+                drawText(Util.toDateTimeString(pairing.playDate), 400F, paint)
+                verticalPosition += REGULAR_SIZE + 2F
+            }
+
+            verticalPosition += REGULAR_SIZE
+        }
+    }
+
+    private fun writeDfbCompetitionBody() {
+
+        val pairingsDBAccess = PairingDBAccess()
+        for (round in 1..getMaxRound()) {
+            val pairingsInRound = pairingsDBAccess.getPairingsForCompetition(
+                this.context,
+                this.competition.id, round
+            )
+            pairingsInRound.forEach { pairing -> pairing.setContext(this.context) }
+            writePairingRound(pairingsInRound)
+        }
     }
 
     private fun nextPage(finishPage: Boolean) {
