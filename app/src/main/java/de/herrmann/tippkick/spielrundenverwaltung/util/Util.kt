@@ -46,11 +46,53 @@ class Util {
 
             val competitionsDBAccess = CompetitionsDBAccess()
             val competition = competitionsDBAccess.getCompetitionById(context, competitionId)
-
-            // numberOfTeams - 1 is the number of matches that are played in one complete competition
-            val numberOfRequiredPairings = competition.numberOfTeams - 1
+            val numberOfRequiredPairings = getTotalNumberOfPairingsInCompetition(competition)
 
             return numberOfFinishedPairings == numberOfRequiredPairings
+        }
+
+        private fun getTotalNumberOfPairingsInCompetition(competition: CompetitionDAO): Int {
+
+            if (isDfbCompetition(competition)) {
+                return competition.numberOfTeams - 1
+            }
+            else if (isGroupCompetition(competition)) {
+
+                val pairingsInGroup: Int = if (competition.numberOfTeamsPerGroup == 4) {
+                    6
+                }
+                else {
+                    15
+                }
+
+                val numberOfTeamsInKnockoutRound = getNumberOfTeamsInFirstKnockoutRound(competition)
+                val pairingsInKnockoutRound: Int = if (numberOfTeamsInKnockoutRound == 8) {
+                    13
+                }
+                else {
+                    29
+                }
+
+                return (pairingsInGroup * competition.numberOfGroups) + pairingsInKnockoutRound
+            }
+
+            return 0
+        }
+
+        private fun getNumberOfTeamsInFirstKnockoutRound(competition: CompetitionDAO) : Int {
+
+            return if (competition.numberOfGroups == 3) {
+                8
+            }
+            else if (competition.numberOfGroups == 4 && competition.numberOfTeamsPerGroup == 4) {
+                8
+            }
+            else if (competition.numberOfGroups == 4 && competition.numberOfTeamsPerGroup == 6) {
+                16
+            }
+            else {
+                16
+            }
         }
 
         fun toDateString(date: Date): String {
