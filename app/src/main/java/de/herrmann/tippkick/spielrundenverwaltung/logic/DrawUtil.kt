@@ -36,6 +36,9 @@ class DrawUtil {
             val teamIdsGroup4 = mutableListOf<Int>()
             val teamIdsGroup5 = mutableListOf<Int>()
             val teamIdsGroup6 = mutableListOf<Int>()
+            val teamIdsGroup7 = mutableListOf<Int>()
+            val teamIdsGroup8 = mutableListOf<Int>()
+
             if (competition.numberOfGroups > 3) {
                 teamIdsGroup4.addAll(fillGroupList(competition, teamIds))
             }
@@ -44,6 +47,12 @@ class DrawUtil {
             }
             if (competition.numberOfGroups > 5) {
                 teamIdsGroup6.addAll(fillGroupList(competition, teamIds))
+            }
+            if (competition.numberOfGroups > 6) {
+                teamIdsGroup7.addAll(fillGroupList(competition, teamIds))
+            }
+            if (competition.numberOfGroups > 7) {
+                teamIdsGroup8.addAll(fillGroupList(competition, teamIds))
             }
 
             // In each group every team has to play against every other team.
@@ -54,6 +63,8 @@ class DrawUtil {
             allPairings.addAll(createPairingsInGroup(teamIdsGroup4, 4, competition.id))
             allPairings.addAll(createPairingsInGroup(teamIdsGroup5, 5, competition.id))
             allPairings.addAll(createPairingsInGroup(teamIdsGroup6, 6, competition.id))
+            allPairings.addAll(createPairingsInGroup(teamIdsGroup7, 7, competition.id))
+            allPairings.addAll(createPairingsInGroup(teamIdsGroup8, 8, competition.id))
 
             // Insert pairings in database.
             val pairingDBAccess = PairingDBAccess()
@@ -174,6 +185,8 @@ class DrawUtil {
          *          5                       6                                   16
          *          6                       4                                   16
          *          6                       6                                   16
+         *          8                       4                                   16
+         *          8                       6                                   32
          */
         fun drawNextRoundGroupCompetition(competition: CompetitionDAO, pairings: MutableList<PairingDAO>,
                                           context: Context, newRound: Int, finishText: String) {
@@ -305,6 +318,8 @@ class DrawUtil {
             val pairingsGroup4 = Util.getPairingsForGroup(pairings, 4)
             val pairingsGroup5 = Util.getPairingsForGroup(pairings, 5)
             val pairingsGroup6 = Util.getPairingsForGroup(pairings, 6)
+            val pairingsGroup7 = Util.getPairingsForGroup(pairings, 7)
+            val pairingsGroup8 = Util.getPairingsForGroup(pairings, 8)
 
             val tableCalculator1 = TableCalculator(context, pairingsGroup1, 1)
             val tableEntriesGroup1: List<TableEntry> = tableCalculator1.calculate()
@@ -318,6 +333,10 @@ class DrawUtil {
             val tableEntriesGroup5: List<TableEntry> = tableCalculator5.calculate()
             val tableCalculator6 = TableCalculator(context, pairingsGroup6, 6)
             val tableEntriesGroup6: List<TableEntry> = tableCalculator6.calculate()
+            val tableCalculator7 = TableCalculator(context, pairingsGroup7, 7)
+            val tableEntriesGroup7 : List<TableEntry> = tableCalculator7.calculate()
+            val tableCalculator8 = TableCalculator(context, pairingsGroup8, 8)
+            val tableEntriesGroup8 : List<TableEntry> = tableCalculator8.calculate()
 
             val survivors = mutableListOf<TableEntry>()
             if (competition.numberOfGroups == 3) {
@@ -433,6 +452,60 @@ class DrawUtil {
                     survivors.add(tableEntriesGroup6[1])
                     survivors.add(tableEntriesGroup6[2])
                     survivors.add(tableEntriesGroup6[3])
+                }
+            }
+            else if (competition.numberOfGroups == 8) {
+                if (competition.numberOfTeamsPerGroup == 4) {
+                    survivors.add(tableEntriesGroup1[0])
+                    survivors.add(tableEntriesGroup1[1])
+                    survivors.add(tableEntriesGroup2[0])
+                    survivors.add(tableEntriesGroup2[1])
+                    survivors.add(tableEntriesGroup3[0])
+                    survivors.add(tableEntriesGroup3[1])
+                    survivors.add(tableEntriesGroup4[0])
+                    survivors.add(tableEntriesGroup4[1])
+                    survivors.add(tableEntriesGroup5[0])
+                    survivors.add(tableEntriesGroup5[1])
+                    survivors.add(tableEntriesGroup6[0])
+                    survivors.add(tableEntriesGroup6[1])
+                    survivors.add(tableEntriesGroup7[0])
+                    survivors.add(tableEntriesGroup7[1])
+                    survivors.add(tableEntriesGroup8[0])
+                    survivors.add(tableEntriesGroup8[1])
+                }
+                else if (competition.numberOfTeamsPerGroup == 6) {
+                    survivors.add(tableEntriesGroup1[0])
+                    survivors.add(tableEntriesGroup1[1])
+                    survivors.add(tableEntriesGroup1[2])
+                    survivors.add(tableEntriesGroup1[3])
+                    survivors.add(tableEntriesGroup2[0])
+                    survivors.add(tableEntriesGroup2[1])
+                    survivors.add(tableEntriesGroup2[2])
+                    survivors.add(tableEntriesGroup2[3])
+                    survivors.add(tableEntriesGroup3[0])
+                    survivors.add(tableEntriesGroup3[1])
+                    survivors.add(tableEntriesGroup3[2])
+                    survivors.add(tableEntriesGroup3[3])
+                    survivors.add(tableEntriesGroup4[0])
+                    survivors.add(tableEntriesGroup4[1])
+                    survivors.add(tableEntriesGroup4[2])
+                    survivors.add(tableEntriesGroup4[3])
+                    survivors.add(tableEntriesGroup5[0])
+                    survivors.add(tableEntriesGroup5[1])
+                    survivors.add(tableEntriesGroup5[2])
+                    survivors.add(tableEntriesGroup5[3])
+                    survivors.add(tableEntriesGroup6[0])
+                    survivors.add(tableEntriesGroup6[1])
+                    survivors.add(tableEntriesGroup6[2])
+                    survivors.add(tableEntriesGroup6[3])
+                    survivors.add(tableEntriesGroup7[0])
+                    survivors.add(tableEntriesGroup7[1])
+                    survivors.add(tableEntriesGroup7[2])
+                    survivors.add(tableEntriesGroup7[3])
+                    survivors.add(tableEntriesGroup8[0])
+                    survivors.add(tableEntriesGroup8[1])
+                    survivors.add(tableEntriesGroup8[2])
+                    survivors.add(tableEntriesGroup8[3])
                 }
             }
 

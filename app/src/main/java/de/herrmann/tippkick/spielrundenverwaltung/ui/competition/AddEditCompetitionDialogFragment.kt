@@ -321,7 +321,7 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
     private fun fillNumberOfGroupsSpinner(spinner: Spinner, mainView: View) {
 
         val arraySpinner = arrayOf(
-            0, 3, 4, 5, 6
+            0, 3, 4, 5, 6, 8
         )
         val adapter: ArrayAdapter<Int> = ArrayAdapter<Int>(
             requireContext(), android.R.layout.simple_spinner_item, arraySpinner
