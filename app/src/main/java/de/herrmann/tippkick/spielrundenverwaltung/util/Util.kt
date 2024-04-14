@@ -172,7 +172,7 @@ class Util {
                     && pairingsRound > 1
         }
 
-        fun getPairingsForGroup(pairings: MutableList<PairingDAO>, group: Int): MutableList<PairingDAO> {
+        fun getPairingsInGroup(pairings: List<PairingDAO>, group: Int): MutableList<PairingDAO> {
 
             val pairingsInGroup = mutableListOf<PairingDAO>()
             pairings.forEach { pairing ->
@@ -180,6 +180,7 @@ class Util {
                     pairingsInGroup.add(pairing)
                 }
             }
+
             return pairingsInGroup
         }
 

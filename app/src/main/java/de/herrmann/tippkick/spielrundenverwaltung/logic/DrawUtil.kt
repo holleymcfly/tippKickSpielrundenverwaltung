@@ -87,12 +87,17 @@ class DrawUtil {
         private fun createPairingsInGroup(teamIdsInGroup: List<Int>, group: Int, competitionId: Int):
                 MutableList<PairingDAO> {
 
+            var currentMatch = 0
             val pairings = mutableListOf<PairingDAO>()
             for (i in 0..teamIdsInGroup.size) {
 
                 for (j in i+1..<teamIdsInGroup.size) {
 
-                    val pairing = PairingDAO(teamIdsInGroup[i], teamIdsInGroup[j])
+                    currentMatch++
+
+                    // This prevents that one team always plays at home.
+                    val pairing = getPairingForTeamCountInGroup(teamIdsInGroup.size, currentMatch,
+                        teamIdsInGroup[i], teamIdsInGroup[j])
                     pairing.round = 1
                     pairing.group = group
                     pairing.competitionId = competitionId
@@ -101,7 +106,60 @@ class DrawUtil {
                 }
             }
 
-            return pairings
+            // Return them in a new order
+            return newOrderedGroupPairings(pairings, teamIdsInGroup.size)
+        }
+
+        private fun newOrderedGroupPairings(pairings: MutableList<PairingDAO>, teamsInGroup: Int):
+            MutableList<PairingDAO> {
+
+            val orderedPairings = mutableListOf<PairingDAO>()
+            if (teamsInGroup == 4) {
+                orderedPairings.add(pairings[0])
+                orderedPairings.add(pairings[5])
+                orderedPairings.add(pairings[3])
+                orderedPairings.add(pairings[2])
+                orderedPairings.add(pairings[1])
+                orderedPairings.add(pairings[4])
+            }
+            else if (teamsInGroup == 6) {
+                orderedPairings.add(pairings[0])
+                orderedPairings.add(pairings[9])
+                orderedPairings.add(pairings[14])
+                orderedPairings.add(pairings[5])
+                orderedPairings.add(pairings[12])
+                orderedPairings.add(pairings[1])
+                orderedPairings.add(pairings[6])
+                orderedPairings.add(pairings[10])
+                orderedPairings.add(pairings[13])
+                orderedPairings.add(pairings[3])
+                orderedPairings.add(pairings[8])
+                orderedPairings.add(pairings[2])
+                orderedPairings.add(pairings[11])
+                orderedPairings.add(pairings[7])
+                orderedPairings.add(pairings[4])
+            }
+
+            return orderedPairings
+        }
+
+        private fun getPairingForTeamCountInGroup(numberOfTeams: Int, currentMatch: Int,
+                                                  teamId1: Int, teamId2: Int): PairingDAO {
+
+            if (numberOfTeams == 4) {
+                when (currentMatch) {
+                    1, 3, 4, 6 -> return PairingDAO(teamId1, teamId2)
+                    2, 5 -> return PairingDAO(teamId2, teamId1)
+                }
+            }
+            else if (numberOfTeams == 6) {
+                when (currentMatch) {
+                    1, 3, 4, 6, 7, 9, 10, 12, 13, 15 -> return PairingDAO(teamId1, teamId2)
+                    2, 5, 8, 11, 14 -> return PairingDAO(teamId2, teamId1)
+                }
+            }
+
+            throw RuntimeException("Invalid number of teams given (" + numberOfTeams + ")")
         }
 
         /**
@@ -312,14 +370,14 @@ class DrawUtil {
         private fun getSurvivors(pairings: MutableList<PairingDAO>, context: Context,
                                  competition: CompetitionDAO): List<TableEntry> {
 
-            val pairingsGroup1 = Util.getPairingsForGroup(pairings, 1)
-            val pairingsGroup2 = Util.getPairingsForGroup(pairings, 2)
-            val pairingsGroup3 = Util.getPairingsForGroup(pairings, 3)
-            val pairingsGroup4 = Util.getPairingsForGroup(pairings, 4)
-            val pairingsGroup5 = Util.getPairingsForGroup(pairings, 5)
-            val pairingsGroup6 = Util.getPairingsForGroup(pairings, 6)
-            val pairingsGroup7 = Util.getPairingsForGroup(pairings, 7)
-            val pairingsGroup8 = Util.getPairingsForGroup(pairings, 8)
+            val pairingsGroup1 = Util.getPairingsInGroup(pairings, 1)
+            val pairingsGroup2 = Util.getPairingsInGroup(pairings, 2)
+            val pairingsGroup3 = Util.getPairingsInGroup(pairings, 3)
+            val pairingsGroup4 = Util.getPairingsInGroup(pairings, 4)
+            val pairingsGroup5 = Util.getPairingsInGroup(pairings, 5)
+            val pairingsGroup6 = Util.getPairingsInGroup(pairings, 6)
+            val pairingsGroup7 = Util.getPairingsInGroup(pairings, 7)
+            val pairingsGroup8 = Util.getPairingsInGroup(pairings, 8)
 
             val tableCalculator1 = TableCalculator(context, pairingsGroup1, 1)
             val tableEntriesGroup1: List<TableEntry> = tableCalculator1.calculate()

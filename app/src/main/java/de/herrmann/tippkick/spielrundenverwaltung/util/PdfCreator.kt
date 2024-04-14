@@ -142,7 +142,7 @@ class PdfCreator {
 
         for (group in 1..this.competition.numberOfGroups) {
 
-            val pairingsInGroup = Util.getPairingsForGroup(`allPairingsIn Round`, group)
+            val pairingsInGroup = Util.getPairingsInGroup(`allPairingsIn Round`, group)
 
             writeGroupHeaderOfGroupCompetition(group)
             writeGroupPairingsOfGroupCompetition(pairingsInGroup, paint, paintBold)

@@ -359,7 +359,7 @@ class PlayFragment : Fragment() {
     private fun loadPairingsForGroup(pairings: List<PairingDAO>, groupPairingsList: ListView,
                                      group: Int) {
 
-        val groupPairings = getPairingsOfGroup(pairings, group)
+        val groupPairings = Util.getPairingsInGroup(pairings, group)
         val arrayAdapter: ArrayAdapter<PairingDAO> =
             ArrayAdapter(requireContext(), R.layout.list_view_center_text, groupPairings)
         groupPairingsList.adapter = arrayAdapter
@@ -401,18 +401,6 @@ class PlayFragment : Fragment() {
         binding.pairingsListGroup8.isVisible = (selectedGroup == 8) && !isTableSelected
         binding.distanceHolderGroup8.isVisible = (selectedGroup == 8) && !isTableSelected
         binding.tableViewGroup8.isVisible = (selectedGroup == 8) && isTableSelected
-    }
-
-    private fun getPairingsOfGroup(pairings: List<PairingDAO>, group: Int): List<PairingDAO> {
-
-        val pairingsOfGroup = mutableListOf<PairingDAO>()
-        pairings.forEach { pairing ->
-            if (pairing.group == group) {
-                pairingsOfGroup.add(pairing)
-            }
-        }
-
-        return pairingsOfGroup
     }
 
     private fun setCompetitionTypeView() {
