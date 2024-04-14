@@ -18,10 +18,15 @@ class VersionInfo {
                    <li>&nbsp;Gruppenwettbewerbe können nicht mehr ohne die Auswahl von Mannschaften ausgelost werden.</li>
                 </ul>
                 <br>
+                <h3>Verbesserungen:</h3>
+                <ul>
+                    <li>&nbsp;Die Reihenfolge der Paarungen in einer Gruppe im Gruppenwettbewerb wurde verbessert.</li>
+                </ul>
+                <br>
                 <h3>Neue Funktionen:</h3>
                 <ul>
                     <li>&nbsp;Druckfunktion für Gruppenwettbewerbe.</li>
-                    <li>&nbsp;Gruppenwettbewerbe mit acht Gruppen sind jetzt möglich.</li>
+                    <li>&nbsp;Gruppenwettbewerbe mit acht Gruppen.</li>
                 </ul>
                 <br>
                 <br>
