@@ -130,6 +130,18 @@ class PlayFragment : Fragment() {
             setGroupsVisibility()
         }
 
+        val tab7 = binding.tabs.getTabAt(6)
+        tab7?.view?.setOnClickListener {
+            selectedGroup = 7
+            setGroupsVisibility()
+        }
+
+        val tab8 = binding.tabs.getTabAt(7)
+        tab8?.view?.setOnClickListener {
+            selectedGroup = 8
+            setGroupsVisibility()
+        }
+
         val tabGroup1Matchday = binding.tabsGroup1.getTabAt(0)
         tabGroup1Matchday?.view?.setOnClickListener {
             isTableSelected = false
@@ -225,6 +237,8 @@ class PlayFragment : Fragment() {
             loadPairingsForGroup(pairings, binding.pairingsListGroup4, 4)
             loadPairingsForGroup(pairings, binding.pairingsListGroup5, 5)
             loadPairingsForGroup(pairings, binding.pairingsListGroup6,6)
+            loadPairingsForGroup(pairings, binding.pairingsListGroup7, 7)
+            loadPairingsForGroup(pairings, binding.pairingsListGroup8, 8)
 
             setGroupsVisibility()
             setTabsVisibility()
@@ -328,9 +342,18 @@ class PlayFragment : Fragment() {
 
     private fun setTabsVisibility() {
 
+        binding.tabs.getTabAt(7)!!.view.isVisible = (currentCompetition!!.numberOfGroups > 7)
+        binding.tabs.getTabAt(6)!!.view.isVisible = (currentCompetition!!.numberOfGroups > 6)
         binding.tabs.getTabAt(5)!!.view.isVisible = (currentCompetition!!.numberOfGroups > 5)
         binding.tabs.getTabAt(4)!!.view.isVisible = (currentCompetition!!.numberOfGroups > 4)
         binding.tabs.getTabAt(3)!!.view.isVisible = (currentCompetition!!.numberOfGroups > 3)
+
+
+        if (currentCompetition!!.numberOfGroups > 6) {
+            for (index in 0..currentCompetition!!.numberOfGroups-1) {
+                binding.tabs.getTabAt(index)!!.setText(getString(R.string.group_abbr) + " " + (index+1).toString())
+            }
+        }
     }
 
     private fun loadPairingsForGroup(pairings: List<PairingDAO>, groupPairingsList: ListView,
@@ -370,6 +393,14 @@ class PlayFragment : Fragment() {
         binding.pairingsListGroup6.isVisible = (selectedGroup == 6) && !isTableSelected
         binding.distanceHolderGroup6.isVisible = (selectedGroup == 6) && !isTableSelected
         binding.tableViewGroup6.isVisible = (selectedGroup == 6) && isTableSelected
+
+        binding.pairingsListGroup7.isVisible = (selectedGroup == 7) && !isTableSelected
+        binding.distanceHolderGroup7.isVisible = (selectedGroup == 7) && !isTableSelected
+        binding.tableViewGroup7.isVisible = (selectedGroup == 7) && isTableSelected
+
+        binding.pairingsListGroup8.isVisible = (selectedGroup == 8) && !isTableSelected
+        binding.distanceHolderGroup8.isVisible = (selectedGroup == 8) && !isTableSelected
+        binding.tableViewGroup8.isVisible = (selectedGroup == 8) && isTableSelected
     }
 
     private fun getPairingsOfGroup(pairings: List<PairingDAO>, group: Int): List<PairingDAO> {
@@ -517,6 +548,14 @@ class PlayFragment : Fragment() {
         if (currentCompetition!!.numberOfGroups > 5) {
             calculateAndFillTable(6, binding.tableGroup6)
         }
+
+        if (currentCompetition!!.numberOfGroups > 6) {
+            calculateAndFillTable(7, binding.tableGroup7)
+        }
+
+        if (currentCompetition!!.numberOfGroups > 7) {
+            calculateAndFillTable(8, binding.tableGroup8)
+        }
     }
 
     private fun calculateAndFillTable(group: Int, tableGroup: TableLayout) {
@@ -526,7 +565,8 @@ class PlayFragment : Fragment() {
         for (view in tableGroup.allViews) {
             if (R.id.header_row_1 == view.id || R.id.header_row_2 == view.id ||
                 R.id.header_row_3 == view.id || R.id.header_row_4 == view.id ||
-                R.id.header_row_5 == view.id || R.id.header_row_6 == view.id
+                R.id.header_row_5 == view.id || R.id.header_row_6 == view.id ||
+                R.id.header_row_7 == view.id || R.id.header_row_8 == view.id
             ) {
                 continue
             }

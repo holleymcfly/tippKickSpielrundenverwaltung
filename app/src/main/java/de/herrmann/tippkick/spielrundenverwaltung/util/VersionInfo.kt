@@ -20,7 +20,8 @@ class VersionInfo {
                 <br>
                 <h3>Neue Funktionen:</h3>
                 <ul>
-                    <li>&nbsp;Druckfunktion für Gruppenwettbewerbe</li>
+                    <li>&nbsp;Druckfunktion für Gruppenwettbewerbe.</li>
+                    <li>&nbsp;Gruppenwettbewerbe mit acht Gruppen sind jetzt möglich.</li>
                 </ul>
                 <br>
                 <br>

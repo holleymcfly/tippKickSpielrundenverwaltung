@@ -146,6 +146,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/group_6" />
 
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/group_7" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/group_8" />
+
         </com.google.android.material.tabs.TabLayout>
 
         <com.google.android.material.tabs.TabLayout
@@ -681,6 +691,183 @@
 
             </TableLayout>
         </HorizontalScrollView>
+
+        <ListView
+            android:id="@+id/pairings_list_group_7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="5"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageButton
+            android:id="@+id/distance_holder_group_7"
+            android:layout_marginTop="70dp"
+            android:layout_width="40dp"
+            android:layout_height="0dp"/>
+
+        <HorizontalScrollView
+            android:id="@+id/table_view_group_7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:id="@+id/table_group_7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:stretchColumns="1">
+
+                <TableRow android:id="@+id/header_row_7">
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Platz"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="start"
+                        android:padding="3dip"
+                        android:text="Mannschaft"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Sp."
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="S"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="U"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="N"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Tore"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Diff."
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Punkte"
+                        android:textSize="18dp" />
+                </TableRow>
+
+            </TableLayout>
+        </HorizontalScrollView>
+
+        <ListView
+            android:id="@+id/pairings_list_group_8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="5"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageButton
+            android:id="@+id/distance_holder_group_8"
+            android:layout_marginTop="70dp"
+            android:layout_width="40dp"
+            android:layout_height="0dp"/>
+
+        <HorizontalScrollView
+            android:id="@+id/table_view_group_8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:id="@+id/table_group_8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:stretchColumns="1">
+
+                <TableRow android:id="@+id/header_row_8">
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Platz"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="start"
+                        android:padding="3dip"
+                        android:text="Mannschaft"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Sp."
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="S"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="U"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="N"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Tore"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Diff."
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Punkte"
+                        android:textSize="18dp" />
+                </TableRow>
+
+            </TableLayout>
+        </HorizontalScrollView>
+
+
+
+
+
 
     </LinearLayout>
 
