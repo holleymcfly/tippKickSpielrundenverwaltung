@@ -13,6 +13,11 @@ class VersionInfo {
             return """
                 <h1>Version 2.1:</h1>
                 <br>
+                <h3>Fehlerbehebungen:</h3>
+                <ul>
+                   <li>&nbsp;Gruppenwettbewerbe können nicht mehr ohne die Auswahl von Mannschaften ausgelost werden.</li>
+                </ul>
+                <br>
                 <h3>Neue Funktionen:</h3>
                 <ul>
                     <li>&nbsp;Druckfunktion für Gruppenwettbewerbe</li>
