@@ -477,11 +477,12 @@ class AddEditCompetitionDialogFragment : DialogFragment() {
             Integer.parseInt(numberOfTeamsSpinner.selectedItem.toString())
         }
         else {
-            Integer.parseInt(numberOfGroupsSpinner.selectedItem.toString()) *
-                    Integer.parseInt(numberOfTeamsPerGroupSpinner.selectedItem.toString())
+            Integer.parseInt(numberOfGroupsSpinner.selectedItem.toString()) * Integer.parseInt(
+                numberOfTeamsPerGroupSpinner.selectedItem.toString()
+            )
         }
 
-        if (numberOfTeams != competition!!.teamRelations.size) {
+        if (numberOfTeams != competition!!.teamRelations.size || numberOfTeams == 0) {
             startDrawingButton.setBackgroundColor(Color.parseColor("#C0C0C0"))
             startDrawingButton.isEnabled = false
             return
